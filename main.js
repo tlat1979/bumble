@@ -2,7 +2,7 @@ const axios = require('axios').default;
 var mockMatches = require('./matches.json');
 
 
-URL = 'https://bumble.com/mwebapi.phtml?SERVER_GET_ENCOUNTERS';
+BUMBLE_URL = 'https://bumble.com/mwebapi.phtml?SERVER_GET_ENCOUNTERS';
 
 HEADERS = {
     "Host": "bumble.com",
@@ -20,7 +20,7 @@ HEADERS = {
     "Referer": "https://bumble.com/app",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "en-US,en;q=0.9,he-IL;q=0.8,he;q=0.7",
-    "Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1:30:txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM",
+    "Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1:30:txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM"
 }
 
 BODY = [{
@@ -57,8 +57,6 @@ REQUEST = {
     message_type: 81,
     version: 1,
     is_background: false,
-    method: "POST",
-    mode: "cors"
 }
 
 var main = async () => {
@@ -91,7 +89,9 @@ var main = async () => {
     console.log(REQUEST);
 
     getUsers = async () => {
-        let res = await axios.get("https://reqres.in/api/users?page=1");
+        //     likeOneMatch = async match => await fetch(this.CONSTANTS.getLikeURL(), this.CupidJsons.getLikeJSON(match.id));
+
+        let res = await axios.post(BUMBLE_URL, REQUEST);
         let { data } = res.data;
         console.log(data)
     };
