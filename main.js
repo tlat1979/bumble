@@ -18,7 +18,7 @@ HEADERS = {
     "Referer": "https://bumble.com/app",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "en-US,en;q=0.9,he-IL;q=0.8,he;q=0.7",
-    "Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1": "30": "txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM",
+    "Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1:30:txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM",
 }
 
 BODY = [{
@@ -49,8 +49,8 @@ BODY = [{
 }];
 
 REQUEST = {
-    HEADERS: headers,
-    BODY: body,
+    header: HEADERS,
+    body: BODY,
     message_id: 7,
     message_type: 81,
     version: 1,
@@ -90,6 +90,7 @@ var main = () => {
     });
 
     console.log(parsedUsers);
+    console.log(REQUEST);
 }
 
 main();
