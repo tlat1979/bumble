@@ -70,16 +70,12 @@ var main = async () => {
         console.error(err);
     }
 
-    users.forEach(user => {
-        var user = user.user;
-        var album = user.albums[0].photos;
-        var newUser = {};
-        var profile = user.profile_fields;
-        newUser.id = user.user_id;
-        newUser.name = user.name;
-        newUser.age = user.age;
-        newUser.photos = [];
-        newUser.their_vote = user.their_vote;
+    users.forEach(oneUser => {
+        let newUser = {};
+        let user = oneUser.user;
+        let album = user.albums[0].photos;
+        let profile = user.profile_fields;
+        [newUser.id, newUser.name, newUser.age, newUser.photos, newUser.their_vote] = [user.user_id, user.name, user.age, [], user.their_vote];
 
         album.forEach(photo => {
             newUser.photos.push("https:" + photo.large_url);
