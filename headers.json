@@ -1,4 +1,3 @@
-//POST /mwebapi.phtml?SERVER_GET_ENCOUNTERS HTTP/1.1
 {
     "Host": "bumble.com",
     "Connection": "keep-alive",
