@@ -1,0 +1,19 @@
+//POST /mwebapi.phtml?SERVER_GET_ENCOUNTERS HTTP/1.1
+{
+    "Host": "bumble.com",
+    "Connection": "keep-alive",
+    "Content-Length": 492,
+    "Pragma": "no-cache",
+    "Cache-Control": "no-cache",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
+    "x-use-session-cookie": 1,
+    "Content-Type": "json",
+    "Accept": "*/*",
+    "Origin": "https://bumble.com",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-Mode": "cors",
+    "Referer": "https://bumble.com/app",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "en-US,en;q=0.9,he-IL;q=0.8,he;q=0.7",
+    "Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1": "30": "txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM",
+}
