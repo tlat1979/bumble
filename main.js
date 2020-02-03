@@ -1,4 +1,6 @@
+const axios = require('axios').default;
 var mockMatches = require('./matches.json');
+
 
 URL = 'https://bumble.com/mwebapi.phtml?SERVER_GET_ENCOUNTERS';
 
@@ -59,7 +61,7 @@ REQUEST = {
     mode: "cors"
 }
 
-var main = () => {
+var main = async () => {
     var parsedUsers = [];
 
     try {
@@ -91,6 +93,13 @@ var main = () => {
 
     console.log(parsedUsers);
     console.log(REQUEST);
+
+    getUsers = async () => {
+        let res = await axios.get("https://reqres.in/api/users?page=1");
+        let { data } = res.data;
+        console.log(data)
+    };
+    await getUsers()
 }
 
 main();
