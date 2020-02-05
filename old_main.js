@@ -1,3 +1,7 @@
+const axios = require('axios').default;
+var mockMatches = require('./matches.json');
+
+
 BUMBLE_URL = 'https://bumble.com/mwebapi.phtml?SERVER_GET_ENCOUNTERS';
 
 HEADERS = {
@@ -16,11 +20,8 @@ HEADERS = {
     "Referer": "https://bumble.com/app",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "en-US,en;q=0.9,he-IL;q=0.8,he;q=0.7",
-    "Cookie": document.cookie,
-    //"Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1:30:txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM"
+    "Cookie": "session_cookie_name=session; device_id=58c2b8be-b8be-be15-1510-1045ebb25daa; aid=725246466; HDR-X-User-id=725246466; cookie_banner_closed=true; session=s1:30:txDLv83CBdSjsuFlXnIwDtYHVF6axKxXC6D2SQAM"
 }
-
-
 
 BODY = [{
     message_type: 81,
@@ -56,46 +57,43 @@ REQUEST = {
     message_type: 81,
     version: 1,
     is_background: false,
-    method: 'post',
-    mode: 'cors',
 }
 
 var main = async () => {
-//     var parsedUsers = [];
+    var parsedUsers = [];
 
-//     try {
-//         var users = mockMatches.body[0].client_encounters.results;
-//     } catch (err) {
-//         console.error(err);
-//     }
+    try {
+        var users = mockMatches.body[0].client_encounters.results;
+    } catch (err) {
+        console.error(err);
+    }
 
-//     users.forEach(oneUser => {
-//         let newUser = {};
-//         let user = oneUser.user;
-//         let album = user.albums[0].photos;
-//         let profile = user.profile_fields;
-//         [newUser.id, newUser.name, newUser.age, newUser.photos, newUser.their_vote] = [user.user_id, user.name, user.age, [], user.their_vote];
+    users.forEach(oneUser => {
+        let newUser = {};
+        let user = oneUser.user;
+        let album = user.albums[0].photos;
+        let profile = user.profile_fields;
+        [newUser.id, newUser.name, newUser.age, newUser.photos, newUser.their_vote] = [user.user_id, user.name, user.age, [], user.their_vote];
 
-//         album.forEach(photo => {
-//             newUser.photos.push("https:" + photo.large_url);
-//         });
+        album.forEach(photo => {
+            newUser.photos.push("https:" + photo.large_url);
+        });
 
-//         profile.forEach(field => {
-//             newUser[field.id] = field.display_value;
-//         });
-//         parsedUsers.push(newUser);
-//     });
+        profile.forEach(field => {
+            newUser[field.id] = field.display_value;
+        });
+        parsedUsers.push(newUser);
+    });
 
-//     console.log(parsedUsers);
-//     console.log(REQUEST);
+    console.log(parsedUsers);
+    console.log(REQUEST);
 
     getUsers = async () => {
-        //     likeOneMatch = async match => await fetch(this.CONSTANTS.getLikeURL(), this.CupidJsons.getLikeJSON(match.id));
 
-        //let res = await fetch(BUMBLE_URL, REQUEST);
-        let response = await fetch("https://bumble.com/mwebapi.phtml?SERVE_GET_ENCOUNTERS", REQUEST);
-        var data = await response.json();
-        //let { data } = res.data;
+        let res = await axios.post(BUMBLE_URL, REQUEST);
+        let {
+            data
+        } = res.data;
         console.log(data)
     };
     await getUsers()
