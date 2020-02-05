@@ -61,44 +61,35 @@ REQUEST = {
 }
 
 var main = async () => {
-//     var parsedUsers = [];
 
-//     try {
-//         var users = mockMatches.body[0].client_encounters.results;
-//     } catch (err) {
-//         console.error(err);
-//     }
+    var JsonResponse = await getUsers();
+    var parsedUsers = [];
 
-//     users.forEach(oneUser => {
-//         let newUser = {};
-//         let user = oneUser.user;
-//         let album = user.albums[0].photos;
-//         let profile = user.profile_fields;
-//         [newUser.id, newUser.name, newUser.age, newUser.photos, newUser.their_vote] = [user.user_id, user.name, user.age, [], user.their_vote];
+    try {
+        var users = JsonResponse.body[0].client_encounters.results;
+    } catch (err) {
+        console.error(err);
+    }
 
-//         album.forEach(photo => {
-//             newUser.photos.push("https:" + photo.large_url);
-//         });
+    users.forEach(oneUser => {
+        let newUser = {};
+        let user = oneUser.user;
+        let album = user.albums[0].photos;
+        let profile = user.profile_fields;
+        [newUser.id, newUser.name, newUser.age, newUser.photos, newUser.their_vote] = [user.user_id, user.name, user.age, [], user.their_vote];
 
-//         profile.forEach(field => {
-//             newUser[field.id] = field.display_value;
-//         });
-//         parsedUsers.push(newUser);
-//     });
+        album.forEach(photo => {
+            newUser.photos.push("https:" + photo.large_url);
+        });
 
-//     console.log(parsedUsers);
-//     console.log(REQUEST);
+        profile.forEach(field => {
+            newUser[field.id] = field.display_value;
+        });
+        parsedUsers.push(newUser);
+    });
 
-    getUsers = async () => {
-        //     likeOneMatch = async match => await fetch(this.CONSTANTS.getLikeURL(), this.CupidJsons.getLikeJSON(match.id));
+    console.log(parsedUsers);
 
-        //let res = await fetch(BUMBLE_URL, REQUEST);
-        let response = await fetch("https://bumble.com/mwebapi.phtml?SERVE_GET_ENCOUNTERS", REQUEST);
-        var data = await response.json();
-        //let { data } = res.data;
-        console.log(data)
-    };
-    await getUsers()
 }
 
 main();
