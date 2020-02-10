@@ -15,10 +15,10 @@ class bumble:
     def printUsers(self, validUsers, brokenUsers):
         print("\n********* VALID USERS ********\n")
         for user in validUsers:
-            print(user["name"] + " " + str(user["age"]) + " " + user["location"] + " " + str(user["distance"]) + user["aboutme_text"])
+            print(user["name"] + " " + str(user["age"]) + " " + user["city"] + " " + str(user["distance"]) + user["aboutme_text"])
         print("\n********* BROKEN USERS ********\n")
         for user in brokenUsers:
-            print(user["name"] + " " + str(user["age"]) + " " + user["location"] + " " + str(user["distance"]) + user["aboutme_text"])
+            print(user["name"] + " " + str(user["age"]) + " " + user["city"] + " " + str(user["distance"]) + user["aboutme_text"])
 
     def getUsers(self):
         command = 'curl '+ GET_USERS_URL + ' ' + HEADERS + ' ' + GET_USERS_BODY
