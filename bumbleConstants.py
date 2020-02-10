@@ -17,6 +17,10 @@ HEADERS = BASE_HEADERS + SESSION_ID + '\''
 
 GET_USERS_BODY =  '''--data-binary '{"body":[{"message_type":81,"server_get_encounters":{"number":10,"context":1,"user_field_filter":{"projection":[210,370,200,230,490,540,530,560,291,732,890,930,662,570,380,493,1140,1150,1160,1161],"request_albums":[{"album_type":7},{"album_type":12,"external_provider":12,"count":8}],"game_mode":0,"request_music_services":{"top_artists_limit":8,"supported_services":[29],"preview_image_size":{"width":120,"height":120}}}}}],"message_id":7,"message_type":81,"version":1,"is_background":false}' --compressed > ''' + USERS_FILE_NAME
 
+VOTE_USER_BODY_A = ''' --data-binary '{"body":[{"message_type":80,"server_encounters_vote":{"person_id":\"'''
+VOTE_USER_BODY_B = '''\","vote":'''
+VOTE_USER_BODY_C = ''',"vote_source":1,"game_mode":0}}],"message_id":13,"message_type":80,"version":1,"is_background":false}' --compressed >> ''' + LIKE_FILE_NAME
+
 LIKE_VOTE = 2
 PASS_VOTE = 3
 

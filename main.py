@@ -74,7 +74,7 @@ class bumble:
         rand = randint(6, 22)
         print("voteUser - Sleeping: "+str(rand)+" Seconds")
         time.sleep(rand)
-        command = 'curl ' + VOTE_USER_URL + ' ' + HEADERS +''' --data-binary '{"body":[{"message_type":80,"server_encounters_vote":{"person_id":\"'''+user["user_id"]+'''\","vote":'''+str(vote)+''',"vote_source":1,"game_mode":0}}],"message_id":13,"message_type":80,"version":1,"is_background":false}' --compressed >> ''' + LIKE_FILE_NAME
+        command = 'curl ' + VOTE_USER_URL + ' ' + HEADERS + VOTE_USER_BODY_A + user["user_id"] + VOTE_USER_BODY_B + str(vote) + VOTE_USER_BODY_C
         #res = os.system(command)
 
         userDetails = user["name"] + " " + str(user["age"]) + " " + user["city"] + " " + str(user["distance"])
