@@ -22,7 +22,7 @@ class bumble:
 
     def getUsers(self):
         command = 'curl '+ GET_USERS_URL + ' ' + HEADERS + ' ' + GET_USERS_BODY
-        #res = os.system(command)
+        res = os.system(command)
 
         with open(USERS_FILE_NAME) as json_file:
             responseData = json.load(json_file)
@@ -64,18 +64,18 @@ class bumble:
 
     def voteOnUsers(self, validUsers, brokenUsers):
         for user in validUsers:
-            self.voteUser(user, LIKE_VOTE)
+            self.voteOnUser(user, LIKE_VOTE)
         for user in brokenUsers:
-            self.voteUser(user, PASS_VOTE)
+            self.voteOnUser(user, PASS_VOTE)
         self.printUsers(validUsers, brokenUsers)
 
         # Like vote: 2 = LIKE_VOTE  ////// Pass vote: 3 = PASS_VOTE
-    def voteUser(self, user, vote):  
+    def voteOnUser(self, user, vote):  
         rand = randint(6, 22)
         print("voteUser - Sleeping: "+str(rand)+" Seconds")
         time.sleep(rand)
         command = 'curl ' + VOTE_USER_URL + ' ' + HEADERS + VOTE_USER_BODY_A + user["user_id"] + VOTE_USER_BODY_B + str(vote) + VOTE_USER_BODY_C
-        #res = os.system(command)
+        res = os.system(command)
 
         userDetails = user["name"] + " " + str(user["age"]) + " " + user["city"] + " " + str(user["distance"])
         command2 = '''echo "'''+userDetails+'''" >> '''

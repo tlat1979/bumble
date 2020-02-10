@@ -19,7 +19,7 @@ GET_USERS_BODY =  '''--data-binary '{"body":[{"message_type":81,"server_get_enco
 
 VOTE_USER_BODY_A = ''' --data-binary '{"body":[{"message_type":80,"server_encounters_vote":{"person_id":\"'''
 VOTE_USER_BODY_B = '''\","vote":'''
-VOTE_USER_BODY_C = ''',"vote_source":1,"game_mode":0}}],"message_id":13,"message_type":80,"version":1,"is_background":false}' --compressed >> ''' + LIKE_FILE_NAME
+VOTE_USER_BODY_C = ''',"vote_source":1,"game_mode":0}}],"message_id":13,"message_type":80,"version":1,"is_background":false}' --compressed '''
 
 LIKE_VOTE = 2
 PASS_VOTE = 3
