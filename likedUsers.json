@@ -1,4 +1,3 @@
-{"$gpb":"badoo.bma.BadooMessage","message_type":132,"version":1,"message_id":13,"object_type":81,"body":[{"$gpb":"badoo.bma.MessageBody","client_vote_response":{"$gpb":"badoo.bma.ClientVoteResponse","vote_response_type":1,"message":"","person_id":"obff5b362880e6595da094108e63d95c2e67d7034735d8ed1","match_mode":0,"accent_color":0},"message_type":132}],"responses_count":1,"is_background":false,"vhost":""}
-
-
-    
+Shlomit 38 Tel Aviv-Yafo, Tel Aviv 10.0
+Keren 38 Kfar Saba, Central District 10.0
+Yifat 38 Bnei Brak, Tel Aviv 10.0
