@@ -6,6 +6,7 @@ import os
 USERS_FILE_NAME = "users3.json"
 LIKE_FILE_NAME = "likedUsers.json"
 PASS_FILE_NAME = "passedUsers.json"
+VOTE_LOG_FILE_NAME = "votes.json"
 
 BASE_BUMBLE_URL = '\'https://bumble.com/mwebapi.phtml?'
 GET_USERS_URL = BASE_BUMBLE_URL + 'SERVER_GET_ENCOUNTERS\''
@@ -19,7 +20,7 @@ GET_USERS_BODY =  '''--data-binary '{"body":[{"message_type":81,"server_get_enco
 
 VOTE_USER_BODY_A = ''' --data-binary '{"body":[{"message_type":80,"server_encounters_vote":{"person_id":\"'''
 VOTE_USER_BODY_B = '''\","vote":'''
-VOTE_USER_BODY_C = ''',"vote_source":1,"game_mode":0}}],"message_id":13,"message_type":80,"version":1,"is_background":false}' --compressed '''
+VOTE_USER_BODY_C = ''',"vote_source":1,"game_mode":0}}],"message_id":13,"message_type":80,"version":1,"is_background":false}' --compressed >> ''' + VOTE_LOG_FILE_NAME
 
 LIKE_VOTE = 2
 PASS_VOTE = 3
