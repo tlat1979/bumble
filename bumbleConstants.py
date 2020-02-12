@@ -1,7 +1,12 @@
+from datetime import datetime, timezone
 from random import randint
 import json
 import time
+import pytz
 import os
+
+
+
 
 USERS_FILE_NAME = "users3.json"
 LIKE_FILE_NAME = "likedUsers.json"
@@ -25,8 +30,17 @@ VOTE_USER_BODY_C = ''',"vote_source":1,"game_mode":0}}],"message_id":13,"message
 LIKE_VOTE = 2
 PASS_VOTE = 3
 
+MIN_VOTE_SEC = 6
+MAX_VOTE_SEC = 22
+
 MIN_AGE = 24
 MAX_AGE = 47
 
 MAX_DISTANCE = 15.0
-KIDS_PHRASES = [' ילד ', ' ילדה ', ' + ', ' פלוס ', ' אמא ', ' נסיך ', ' נסיכה ']
+KIDS_PHRASES = [' ילד ', ' ילדה ', ' + ', '+', ' פלוס ', ' אמא ', ' נסיך ', ' נסיכה ']
+
+
+def getCurrentDateTime():
+    tz = pytz.timezone('Israel')
+    israel_now = datetime.now(tz)
+    return "["+str(israel_now).split('.')[0]+"] "

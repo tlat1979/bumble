@@ -5,7 +5,7 @@ class bumble:
     def isValidUser(self, user):
         validKids = True
         for phrase in KIDS_PHRASES:
-            if not user['aboutme_text'].find(phrase):
+            if user['aboutme_text'].find(phrase) is not -1:
                 validKids = False
 
         validAge = user['age'] >= MIN_AGE and user["age"] <= MAX_AGE
@@ -58,7 +58,9 @@ class bumble:
             for field in profile:
                 newUser[field["id"]] = field["display_value"]
 
-            validUsers.append(newUser) if self.isValidUser(newUser) else brokenUsers.append(newUser)
+            rand = randint(1, 10) # choosing only some of the users for 
+            if rand >= 3:
+                validUsers.append(newUser) if self.isValidUser(newUser) else brokenUsers.append(newUser)
 
         return self.voteOnUsers(validUsers, brokenUsers)
 
@@ -71,13 +73,13 @@ class bumble:
 
         # Like vote: 2 = LIKE_VOTE  ////// Pass vote: 3 = PASS_VOTE
     def voteOnUser(self, user, vote):  
-        rand = randint(6, 22)
+        rand = randint(MIN_VOTE_SEC, MAX_VOTE_SEC)
         print("voteUser - Sleeping: "+str(rand)+" Seconds")
         time.sleep(rand)
         command = 'curl ' + VOTE_USER_URL + ' ' + HEADERS + VOTE_USER_BODY_A + user["user_id"] + VOTE_USER_BODY_B + str(vote) + VOTE_USER_BODY_C
         res = os.system(command)
 
-        userDetails = user["name"] + " " + str(user["age"]) + " " + user["city"] + " " + str(user["distance"])
+        userDetails = getCurrentDateTime() + user["name"] + " " + str(user["age"]) + " " + user["city"] + " " + str(user["distance"])
         command2 = '''echo "'''+userDetails+'''" >> '''
         if vote is LIKE_VOTE:
             os.system(command2 + LIKE_FILE_NAME)
