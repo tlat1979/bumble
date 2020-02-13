@@ -1,12 +1,10 @@
 from datetime import datetime, timezone
 from random import randint
+import time
 import json
 import time
 import pytz
 import os
-
-
-
 
 USERS_FILE_NAME = "users3.json"
 LIKE_FILE_NAME = "likedUsers.json"
@@ -39,6 +37,8 @@ MAX_AGE = 47
 MAX_DISTANCE = 15.0
 KIDS_PHRASES = [' ילד ', ' ילדה ', ' + ', '+', ' פלוס ', ' אמא ', ' נסיך ', ' נסיכה ']
 
+MIN_SLEEP_SECONDS = 2 * 60 * 60 # 2 hours
+MAX_SLEEP_SECONDS = 4 * 60 * 60 # 4 hours
 
 def getCurrentDateTime():
     tz = pytz.timezone('Israel')

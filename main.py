@@ -87,5 +87,17 @@ class bumble:
             os.system(command2 + PASS_FILE_NAME)
 
 
+def main():
+    for i in range(1, 5):
+        # choosing how much time to sleep
+        randomSleepSeconds = randint(MIN_SLEEP_SECONDS, MAX_SLEEP_SECONDS) 
+        b = bumble()
+        b.getUsers()
+        print("#" + str(i) + " Sleeping for: " + str(randomSleepSeconds) + " Seconds Or: " + str(randomSleepSeconds/3600) + " Hours")
+        time.sleep(randomSleepSeconds)
+
+
+# main()
+
 b = bumble()
 b.getUsers()
