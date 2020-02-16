@@ -71,8 +71,8 @@ var isValidUser = user => {
         validDistance = user.distance < MAX_DISTANCE;
     }
     if (user.about) {
-        for (condition in BROKEN_CREDENTIALS) {
-            if (user.about).includes(condition) {
+        for (i in BROKEN_CREDENTIALS) {
+            if (user.about).includes(BROKEN_CREDENTIALS[i]) {
                 validAbout = false;
                 break;
             }
@@ -96,4 +96,4 @@ setInterval(() => {
     randSleepMain = getPrintRand(10 * 1000 * 30, "setInterval top");
     console.log("SetInterval sleeps: " + randSleepMain + " Seconds");
     main()
-}, getPrintRand(10 * 1000 * 30, "setInterval bottom"))
+}, getPrintRand(10 * 1000 * 30, "setInterval bottom"));
