@@ -88,14 +88,17 @@ var isValidUser = user => {
 var main = async () => {
 
     randUserAmount = getPrintRand(20, "main top");
+    var arr = Array.from(Array(randUserAmount).keys())
     console.log("Main addressing: " + randUserAmount + " of users");
 
-    for (i = 0; i < randUserAmount; i++) {
+    for await (i in arr) {
+        console.log("User #" + i + " out of " + randUserAmount);
         var user = getUserDetails();
         isValidUser(user) ? simulateClick(like) : simulateClick(pass);
         randSleep = getPrintRand(20, "randSleep for loop");
         await sleep(randSleep * 1000);
     }
+    console.log("Done");
 }
 
 // setInterval(() => {
