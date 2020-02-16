@@ -5,6 +5,7 @@ class Utils {
         this.MIN_AGE = 24
         this.MAX_DISTANCE = 15;
         this.BROKEN_CREDENTIALS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
+        this.HOUR = 60 * 60;
 
         this.like = document.querySelector(".encounters-action--like");
         this.pass = document.querySelector(".encounters-action--dislike");
@@ -26,11 +27,12 @@ class Utils {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    getPrintRand = (max, str) => {
-        let rand = Math.floor(Math.random() * max);
+    getPrintRand(min, max, str) {
+        let rand = Math.floor(Math.random() * (max - min) + min);
         console.log(str + " - random: " + rand + " seconds");
         return rand;
     }
+
 
     getProtect = className => {
         var temp = document.querySelector("." + className);
@@ -56,7 +58,7 @@ class Bumble {
         this.user.city = this.utils.getProtect("location-widget__town");
         this.user.distance = this.utils.getProtect("location-widget__distance");
         if (this.user.distance) {
-            let temp = "~10 km away".split(" ");
+            let temp = this.user.distance.split(" ");
             temp = temp[0].split("~");
             this.user.distance = temp[1];
         }
@@ -96,7 +98,7 @@ class Bumble {
 var main = async () => {
 
     let bumble = new Bumble();
-    randUserAmount = bumble.utils.getPrintRand(20, "main top");
+    randUserAmount = bumble.utils.getPrintRand(5, 20, "main top");
     let arr = Array.from(Array(randUserAmount).keys())
     console.log("Main addressing: " + randUserAmount + " of users");
 
@@ -104,16 +106,19 @@ var main = async () => {
         console.log("User #" + i + " out of " + randUserAmount);
         bumble.getUserDetails();
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
-        let randSleep = bumble.utils.getPrintRand(20, "randSleep for loop");
+        let randSleep = bumble.utils.getPrintRand(5, 20, "randSleep for loop");
         await bumble.utils.sleep(randSleep * 1000);
     }
     console.log("Done");
 }
 
-// setInterval(() => {
-//     randSleepMain = getPrintRand(10 * 1000 * 30, "setInterval top");
-//     console.log("SetInterval sleeps: " + randSleepMain + " Seconds");
-//     main()
-// }, getPrintRand(10 * 1000 * 30, "setInterval bottom"));
+let bumble = new Bumble();
+setInterval(() => {
+    var d = new Date();
+    var timeHours = d.getHours();
+    if (timeHours < 8 || timeHours > 23) return;
 
-main();
+    randSleepMain = bumble.utils.getPrintRand(bumble.utils.HOUR * 3000, bumble.utils.HOUR * 5000, "setInterval top");
+    console.log("SetInterval sleeps: " + randSleepMain / (bumble.utils.HOUR * 1000) + " Hours");
+    main();
+}, bumble.utils.getPrintRand(bumble.utils.HOUR * 1000, bumble.utils.HOUR * 5000, "setInterval bottom"));
