@@ -17,10 +17,16 @@ var getPrintRand = (max, str) => {
     return rand;
 }
 
+MAX_AGE = 47;
+MIN_AGE = 24
+MAX_DISTANCE = 15;
+
 var like = document.querySelector(".encounters-action--like");
 var pass = document.querySelector(".encounters-action--dislike");
+
 var randSleepMain = Math.floor(Math.random() * 10)
 console.log("Initial sleep " + randSleepMain + " Milliseconds");
+
 
 var getProtect = className => {
     var temp = $("." + className);
@@ -45,11 +51,25 @@ var getUserDetails = () => {
         user.distance = temp[1];
     }
 
-    user.additionalInfo = []; // height, exercise, drink, smoke, pets, sign, religion
+    // height, exercise, drink, smoke, pets, sign, religion
+    user.additionalInfo = [];
     additionalInfo = document.querySelectorAll(".pill__title");
     additionalInfo.forEach(pill => user.additionalInfo.push(pill.innerText));
 
     return user;
+}
+
+var isValidUser = user => {
+    var validAge = true;
+    var validDistance = true;
+    var validAbout = true;
+    if (user.age) {
+        validAge = user.age < MAX_AGE && user.age > MIN_AGE;
+    }
+    if (user.distance) {
+        validDistance = user.distance < MAX_DISTANCE;
+    }
+    if (user.about)
 }
 
 var main = async () => {
