@@ -91,7 +91,7 @@ var main = async () => {
     var arr = Array.from(Array(randUserAmount).keys())
     console.log("Main addressing: " + randUserAmount + " of users");
 
-    for await (i in arr) {
+    for await (i of arr) {
         console.log("User #" + i + " out of " + randUserAmount);
         var user = getUserDetails();
         isValidUser(user) ? simulateClick(like) : simulateClick(pass);
