@@ -30,7 +30,7 @@ console.log("Initial sleep " + randSleepMain + " Milliseconds");
 
 
 var getProtect = className => {
-    var temp = $("." + className);
+    var temp = document.querySelector("." + className);
     return temp ? temp.textContent : "";
 }
 
@@ -72,28 +72,33 @@ var isValidUser = user => {
     }
     if (user.about) {
         for (i in BROKEN_CREDENTIALS) {
-            if (user.about).includes(BROKEN_CREDENTIALS[i]) {
+            if ((user.about).includes(BROKEN_CREDENTIALS[i])) {
                 validAbout = false;
                 break;
             }
         }
     }
+    console.log("Age " + validAge + " Distance " + validDistance + " About " + validAbout);
     return validAge && validDistance && validAbout;
 }
 
 var main = async () => {
+
     randUserAmount = getPrintRand(20, "main top");
     console.log("Main addressing: " + randUserAmount + " of users");
+
     for (i = 0; i < randUserAmount; i++) {
-        randLikePass = getPrintRand(20, "for loop");
-        randLikePass >= 5 ? simulateClick(like) : simulateClick(pass);
-        //console.log("For loop sleeping: " + randLikePass + " seconds between users");
-        await sleep(randLikePass * 1000)
+        var user = getUserDetails();
+        isValidUser(user) ? simulateClick(like) : simulateClick(pass);
+        randSleep = getPrintRand(20, "randSleep for loop");
+        await sleep(randSleep * 1000);
     }
 }
 
-setInterval(() => {
-    randSleepMain = getPrintRand(10 * 1000 * 30, "setInterval top");
-    console.log("SetInterval sleeps: " + randSleepMain + " Seconds");
-    main()
-}, getPrintRand(10 * 1000 * 30, "setInterval bottom"));
+// setInterval(() => {
+//     randSleepMain = getPrintRand(10 * 1000 * 30, "setInterval top");
+//     console.log("SetInterval sleeps: " + randSleepMain + " Seconds");
+//     main()
+// }, getPrintRand(10 * 1000 * 30, "setInterval bottom"));
+
+main();
