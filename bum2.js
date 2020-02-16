@@ -20,6 +20,7 @@ var getPrintRand = (max, str) => {
 MAX_AGE = 47;
 MIN_AGE = 24
 MAX_DISTANCE = 15;
+BROKEN_CREDENTIALS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
 
 var like = document.querySelector(".encounters-action--like");
 var pass = document.querySelector(".encounters-action--dislike");
@@ -69,7 +70,15 @@ var isValidUser = user => {
     if (user.distance) {
         validDistance = user.distance < MAX_DISTANCE;
     }
-    if (user.about)
+    if (user.about) {
+        for (condition in BROKEN_CREDENTIALS) {
+            if (user.about).includes(condition) {
+                validAbout = false;
+                break;
+            }
+        }
+    }
+    return validAge && validDistance && validAbout;
 }
 
 var main = async () => {
