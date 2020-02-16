@@ -78,7 +78,10 @@ var isValidUser = user => {
             }
         }
     }
-    console.log("Age " + validAge + " Distance " + validDistance + " About " + validAbout);
+    var details = "Name " + user.name + " | Age " + validAge + " | Distance " + validDistance + " | About " + validAbout;
+    validAge && validDistance && validAbout ?
+        console.log("Liked: " + details) :
+        console.warn("Passed: " + details);
     return validAge && validDistance && validAbout;
 }
 
