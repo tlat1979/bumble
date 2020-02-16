@@ -1,102 +1,111 @@
-var simulateClick = elem => {
-    var evt = new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        view: window
-    });
-    var canceled = !elem.dispatchEvent(evt);
-};
+class Utils {
 
-var sleep = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+    constructor() {
+        this.MAX_AGE = 47;
+        this.MIN_AGE = 24
+        this.MAX_DISTANCE = 15;
+        this.BROKEN_CREDENTIALS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
 
-var getPrintRand = (max, str) => {
-    rand = Math.floor(Math.random() * max);
-    console.log(str + " - random: " + rand + " seconds");
-    return rand;
-}
+        this.like = document.querySelector(".encounters-action--like");
+        this.pass = document.querySelector(".encounters-action--dislike");
 
-MAX_AGE = 47;
-MIN_AGE = 24
-MAX_DISTANCE = 15;
-BROKEN_CREDENTIALS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
-
-var like = document.querySelector(".encounters-action--like");
-var pass = document.querySelector(".encounters-action--dislike");
-
-var randSleepMain = Math.floor(Math.random() * 10)
-console.log("Initial sleep " + randSleepMain + " Milliseconds");
-
-
-var getProtect = className => {
-    var temp = document.querySelector("." + className);
-    return temp ? temp.textContent : "";
-}
-
-var getUserDetails = () => {
-    var user = {}
-    nameAge = getProtect("encounters-story-profile__name");
-    nameAge = nameAge.split(',');
-    user.name = nameAge[0];
-    user.age = nameAge[1].trim();
-    user.profession = getProtect("encounters-story-profile__occupation");
-    user.education = getProtect("encounters-story-profile__education");
-    user.about = getProtect("encounters-story-about__text");
-
-    user.city = getProtect("location-widget__town");
-    user.distance = getProtect("location-widget__distance");
-    if (user.distance) {
-        var temp = "~10 km away".split(" ");
-        temp = temp[0].split("~");
-        user.distance = temp[1];
+        this.randSleepMain = Math.floor(Math.random() * 10)
+        console.log("Initial sleep " + this.randSleepMain + " Milliseconds");
     }
 
-    // height, exercise, drink, smoke, pets, sign, religion
-    user.additionalInfo = [];
-    additionalInfo = document.querySelectorAll(".pill__title");
-    additionalInfo.forEach(pill => user.additionalInfo.push(pill.innerText));
+    simulateClick = elem => {
+        let evt = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        });
+        let canceled = !elem.dispatchEvent(evt);
+    }
 
-    return user;
+    sleep = ms => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    getPrintRand = (max, str) => {
+        let rand = Math.floor(Math.random() * max);
+        console.log(str + " - random: " + rand + " seconds");
+        return rand;
+    }
+
+    getProtect = className => {
+        var temp = document.querySelector("." + className);
+        return temp ? temp.textContent : "";
+    }
 }
 
-var isValidUser = user => {
-    var validAge = true;
-    var validDistance = true;
-    var validAbout = true;
-    if (user.age) {
-        validAge = user.age < MAX_AGE && user.age > MIN_AGE;
+class Bumble {
+    constructor() {
+        this.utils = new Utils();
+        this.user = {};
     }
-    if (user.distance) {
-        validDistance = user.distance < MAX_DISTANCE;
+
+    getUserDetails = () => {
+        let nameAge = this.utils.getProtect("encounters-story-profile__name");
+        nameAge = nameAge.split(',');
+        this.user.name = nameAge[0];
+        this.user.age = nameAge[1].trim();
+        this.user.profession = this.utils.getProtect("encounters-story-profile__occupation");
+        this.user.education = this.utils.getProtect("encounters-story-profile__education");
+        this.user.about = this.utils.getProtect("encounters-story-about__text");
+
+        this.user.city = this.utils.getProtect("location-widget__town");
+        this.user.distance = this.utils.getProtect("location-widget__distance");
+        if (this.user.distance) {
+            let temp = "~10 km away".split(" ");
+            temp = temp[0].split("~");
+            this.user.distance = temp[1];
+        }
+
+        // height, exercise, drink, smoke, pets, sign, religion
+        this.user.additionalInfo = [];
+        let additionalInfo = document.querySelectorAll(".pill__title");
+        additionalInfo.forEach(pill => this.user.additionalInfo.push(pill.innerText));
     }
-    if (user.about) {
-        for (i in BROKEN_CREDENTIALS) {
-            if ((user.about).includes(BROKEN_CREDENTIALS[i])) {
-                validAbout = false;
-                break;
+
+    isValidUser = () => {
+        let validAge = true;
+        let validDistance = true;
+        let validAbout = true;
+        if (this.user.age) {
+            validAge = this.user.age < this.utils.MAX_AGE && this.user.age > this.utils.MIN_AGE;
+        }
+        if (this.user.distance) {
+            validDistance = this.user.distance < this.utils.MAX_DISTANCE;
+        }
+        if (this.user.about) {
+            for (let i in this.utils.BROKEN_CREDENTIALS) {
+                if ((this.user.about).includes(this.utils.BROKEN_CREDENTIALS[i])) {
+                    validAbout = false;
+                    break;
+                }
             }
         }
+        let details = "Name " + this.user.name + " | Age " + validAge + " | Distance " + validDistance + " | About " + validAbout;
+        validAge && validDistance && validAbout ?
+            console.log("Liked: " + details) :
+            console.warn("Passed: " + details);
+        return validAge && validDistance && validAbout;
     }
-    var details = "Name " + user.name + " | Age " + validAge + " | Distance " + validDistance + " | About " + validAbout;
-    validAge && validDistance && validAbout ?
-        console.log("Liked: " + details) :
-        console.warn("Passed: " + details);
-    return validAge && validDistance && validAbout;
 }
 
 var main = async () => {
 
-    randUserAmount = getPrintRand(20, "main top");
-    var arr = Array.from(Array(randUserAmount).keys())
+    let bumble = new Bumble();
+    randUserAmount = bumble.utils.getPrintRand(20, "main top");
+    let arr = Array.from(Array(randUserAmount).keys())
     console.log("Main addressing: " + randUserAmount + " of users");
 
     for await (i of arr) {
         console.log("User #" + i + " out of " + randUserAmount);
-        var user = getUserDetails();
-        isValidUser(user) ? simulateClick(like) : simulateClick(pass);
-        randSleep = getPrintRand(20, "randSleep for loop");
-        await sleep(randSleep * 1000);
+        bumble.getUserDetails();
+        bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
+        let randSleep = bumble.utils.getPrintRand(20, "randSleep for loop");
+        await bumble.utils.sleep(randSleep * 1000);
     }
     console.log("Done");
 }
