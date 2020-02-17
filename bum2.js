@@ -97,6 +97,7 @@ class Bumble {
         this.user.additionalInfo = [];
         let additionalInfo = document.querySelectorAll(".pill__title");
         additionalInfo.forEach(pill => this.user.additionalInfo.push(pill.innerText));
+        return true;
     }
 
     isValidUser = () => {
