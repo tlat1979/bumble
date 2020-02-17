@@ -22,15 +22,13 @@ class Utils {
         this.MAX_AGE = 47;
         this.MIN_AGE = 24
         this.MAX_DISTANCE = 15;
-        this.BROKEN_CREDENTIALS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
+        this.BROKEN_CONDITIONS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
         this.MILLISECOND_TO_HOUR = 60 * 60 * 1000;
         this.HOUR_TO_MILLISECOND = 1 / (60 * 60 * 1000);
+        this.randSleepMain = this.getPrintRand(this.MILLISECOND_TO_HOUR * 2, this.MILLISECOND_TO_HOUR * 5, "Initial sleep");
 
         this.like = document.querySelector(".encounters-action--like");
         this.pass = document.querySelector(".encounters-action--dislike");
-
-        this.randSleepMain = Math.floor(Math.random() * 10)
-        log("Initial sleep " + this.randSleepMain + " Milliseconds", "blue");
     }
 
     simulateClick = elem => {
@@ -42,9 +40,7 @@ class Utils {
         let canceled = !elem.dispatchEvent(evt);
     }
 
-    sleep = ms => {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     // milliseconds
     getPrintRand(min, max, str) {
@@ -53,14 +49,13 @@ class Utils {
         return rand;
     }
 
-
     getProtect = className => {
         var temp = document.querySelector("." + className);
         return temp ? temp.textContent : "";
     }
 
     msToTime = duration => {
-        var milliseconds = parseInt((duration % 1000) / 100),
+        let milliseconds = parseInt((duration % 1000) / 100),
             seconds = Math.floor((duration / 1000) % 60),
             minutes = Math.floor((duration / (1000 * 60)) % 60),
             hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
@@ -87,7 +82,6 @@ class Bumble {
         this.user.profession = this.utils.getProtect("encounters-story-profile__occupation");
         this.user.education = this.utils.getProtect("encounters-story-profile__education");
         this.user.about = this.utils.getProtect("encounters-story-about__text");
-
         this.user.city = this.utils.getProtect("location-widget__town");
         this.user.distance = this.utils.getProtect("location-widget__distance");
         if (this.user.distance) {
@@ -113,8 +107,8 @@ class Bumble {
             validDistance = this.user.distance < this.utils.MAX_DISTANCE;
         }
         if (this.user.about) {
-            for (let i in this.utils.BROKEN_CREDENTIALS) {
-                if ((this.user.about).includes(this.utils.BROKEN_CREDENTIALS[i])) {
+            for (let i in this.utils.BROKEN_CONDITIONS) {
+                if ((this.user.about).includes(this.utils.BROKEN_CONDITIONS[i])) {
                     validAbout = false;
                     break;
                 }
@@ -129,7 +123,6 @@ class Bumble {
 }
 
 var main = async () => {
-
     let bumble = new Bumble();
 
     // random user amount: 5 - 20
@@ -147,13 +140,17 @@ var main = async () => {
     log("Done", "blue");
 }
 
-let bumble = new Bumble();
-setInterval(() => {
-    var d = new Date();
-    var timeHours = d.getHours();
-    if (timeHours < 8 || timeHours > 23) return;
 
-    randSleepMain = bumble.utils.getPrintRand(bumble.utils.MILLISECOND_TO_HOUR * 2, bumble.utils.HOUR * 5, " setInterval top");
-    log("SetInterval sleeps: " + randSleepMain * bumble.utils.HOUR_TO_MILLISECOND + " Hours");
-    main();
-}, bumble.utils.getPrintRand(bumble.utils.MILLISECOND_TO_HOUR * 2, bumble.utils.MILLISECOND_TO_HOUR * 5, " setInterval bottom"));
+var repeatQuery = () => {
+    let bumble = new Bumble();
+    var HOUR = bumble.utils.MILLISECOND_TO_HOUR;
+    setInterval(() => {
+        var d = new Date();
+        var timeHours = d.getHours();
+        if (timeHours < 8 || timeHours > 23) return;
+
+        randSleepMain = bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval top");
+        log("SetInterval sleeps: " + randSleepMain * HOUR + " Hours");
+        main();
+    }, bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval bottom"));
+}
