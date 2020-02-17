@@ -23,7 +23,7 @@ class Utils {
     constructor() {
         this.MAX_AGE = 47;
         this.MIN_AGE = 24
-        this.MAX_DISTANCE = 15;
+        this.MAX_DISTANCE = 21;
         this.BROKEN_CONDITIONS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
         this.MILLISECOND_TO_HOUR = 60 * 60 * 1000;
         this.HOUR_TO_MILLISECOND = 1 / (60 * 60 * 1000);
