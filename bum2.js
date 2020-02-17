@@ -1,17 +1,19 @@
 var log = (message, level) => {
+    let now = new Date();
+    let time = "[" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "] ";
     if (!level || (level != "green" && level != "red" && level != "blue")) {
-        console.log(message);
+        console.log(time + message);
         return;
     }
     switch (level) {
         case "green":
-            console.log('%c' + message, 'background: #222; color: #bada55');
+            console.log('%c' + time + message, 'background: #222; color: #bada55');
             break;
         case "red":
-            console.log('%c' + message, 'background: #222; color: #FF5733');
+            console.log('%c' + time + message, 'background: #222; color: #FF5733');
             break;
         case "blue":
-            console.log('%c' + message, 'background: #222; color: #33A8FF');
+            console.log('%c' + time + message, 'background: #222; color: #33A8FF');
             break;
     }
 }
@@ -78,6 +80,7 @@ class Bumble {
         let nameAge = this.utils.getProtect("encounters-story-profile__name");
         nameAge = nameAge.split(',');
         this.user.name = nameAge[0];
+        if (this.user.name == "") return false;
         this.user.age = nameAge[1].trim();
         this.user.profession = this.utils.getProtect("encounters-story-profile__occupation");
         this.user.education = this.utils.getProtect("encounters-story-profile__education");
@@ -86,8 +89,8 @@ class Bumble {
         this.user.distance = this.utils.getProtect("location-widget__distance");
         if (this.user.distance) {
             let temp = this.user.distance.split(" ");
-            temp = temp[0].split("~");
-            this.user.distance = temp[1];
+            let temp1 = temp[0].split("~");
+            this.user.distance = (Array.isArray(temp1)) ? temp1[0] : temp1[1];
         }
 
         // height, exercise, drink, smoke, pets, sign, religion
@@ -132,7 +135,11 @@ var main = async () => {
 
     for await (i of arr) {
         log("User #" + (i + 1) + " out of " + randUserAmount, "blue");
-        bumble.getUserDetails();
+        let ret = bumble.getUserDetails();
+        if (!ret) {
+            log("NO USERS FOUND", "red");
+            return;
+        }
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "randSleep for loop");
         await bumble.utils.sleep(randSleep);
