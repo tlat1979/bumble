@@ -1,3 +1,21 @@
+var log = (message, level) => {
+    if (!level || (level != "green" && level != "red")) {
+        console.log(message);
+        return;
+    }
+    switch (level) {
+        case "green":
+            console.log('%c' + message, 'background: #222; color: #bada55');
+            break;
+        case "red":
+            console.log('%c' + message, 'background: #222; color: #FF5733');
+            break;
+        case "blue":
+            console.log('%c' + message, 'background: #222; color: #33A8FF');
+            break;
+    }
+}
+
 class Utils {
 
     constructor() {
@@ -11,7 +29,7 @@ class Utils {
         this.pass = document.querySelector(".encounters-action--dislike");
 
         this.randSleepMain = Math.floor(Math.random() * 10)
-        console.log("Initial sleep " + this.randSleepMain + " Milliseconds");
+        log("Initial sleep " + this.randSleepMain + " Milliseconds", "blue");
     }
 
     simulateClick = elem => {
@@ -29,7 +47,7 @@ class Utils {
 
     getPrintRand(min, max, str) {
         let rand = Math.floor(Math.random() * (max - min) + min);
-        console.log(str + " - random: " + rand + " seconds");
+        log(str + " - random: " + rand + " seconds", "blue");
         return rand;
     }
 
@@ -38,6 +56,8 @@ class Utils {
         var temp = document.querySelector("." + className);
         return temp ? temp.textContent : "";
     }
+
+
 }
 
 class Bumble {
@@ -87,10 +107,10 @@ class Bumble {
                 }
             }
         }
-        let details = "Name " + this.user.name + " | Age " + validAge + " | Distance " + validDistance + " | About " + validAbout;
+        let details = "Name " + this.user.name + " | Age " + this.user.age + " | Distance " + this.user.distance + " | About " + this.user.about;
         validAge && validDistance && validAbout ?
-            console.log("Liked: " + details) :
-            console.warn("Passed: " + details);
+            log("Liked: " + details, "green") :
+            log("Passed: " + details, "red");
         return validAge && validDistance && validAbout;
     }
 }
@@ -100,16 +120,16 @@ var main = async () => {
     let bumble = new Bumble();
     randUserAmount = bumble.utils.getPrintRand(5, 20, "main top");
     let arr = Array.from(Array(randUserAmount).keys())
-    console.log("Main addressing: " + randUserAmount + " of users");
+    log("Main addressing: " + randUserAmount + " of users", "blue");
 
     for await (i of arr) {
-        console.log("User #" + i + " out of " + randUserAmount);
+        log("User #" + (i + 1) + " out of " + randUserAmount, "blue");
         bumble.getUserDetails();
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         let randSleep = bumble.utils.getPrintRand(5, 20, "randSleep for loop");
         await bumble.utils.sleep(randSleep * 1000);
     }
-    console.log("Done");
+    log("Done", "blue");
 }
 
 let bumble = new Bumble();
@@ -119,6 +139,6 @@ setInterval(() => {
     if (timeHours < 8 || timeHours > 23) return;
 
     randSleepMain = bumble.utils.getPrintRand(bumble.utils.HOUR * 3000, bumble.utils.HOUR * 5000, "setInterval top");
-    console.log("SetInterval sleeps: " + randSleepMain / (bumble.utils.HOUR * 1000) + " Hours");
+    log("SetInterval sleeps: " + randSleepMain / (bumble.utils.HOUR * 1000) + " Hours");
     main();
 }, bumble.utils.getPrintRand(bumble.utils.HOUR * 1000, bumble.utils.HOUR * 5000, "setInterval bottom"));
