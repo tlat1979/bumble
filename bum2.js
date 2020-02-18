@@ -126,7 +126,7 @@ class Bumble {
     }
 }
 
-var mainBody = async () => {
+var mainBody = async bumble => {
 
     var d = new Date();
     var timeHours = d.getHours();
@@ -158,7 +158,7 @@ var main = async () => {
     let HOUR = bumble.utils.MILLISECOND_TO_HOUR;
 
     while (true) {
-        await mainBody();
+        await mainBody(bumble);
         let randSleep = bumble.utils.getPrintRand(HOUR, 2 * HOUR, "randSleep while loop #" + i);
         i++;
         await bumble.utils.sleep(randSleep);
@@ -166,16 +166,16 @@ var main = async () => {
 }
 
 
-var repeatQuery = () => {
-    let bumble = new Bumble();
-    var HOUR = bumble.utils.MILLISECOND_TO_HOUR;
-    setInterval(() => {
-        var d = new Date();
-        var timeHours = d.getHours();
-        if (timeHours < 8 || timeHours > 23) return;
+// var repeatQuery = () => {
+//     let bumble = new Bumble();
+//     var HOUR = bumble.utils.MILLISECOND_TO_HOUR;
+//     setInterval(() => {
+//         var d = new Date();
+//         var timeHours = d.getHours();
+//         if (timeHours < 8 || timeHours > 23) return;
 
-        randSleepMain = bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval top");
-        log("SetInterval sleeps: " + randSleepMain * HOUR + " Hours");
-        main();
-    }, bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval bottom"));
-}
+//         randSleepMain = bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval top");
+//         log("SetInterval sleeps: " + randSleepMain * HOUR + " Hours");
+//         main();
+//     }, bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval bottom"));
+// }
