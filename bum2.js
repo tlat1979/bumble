@@ -47,7 +47,7 @@ class Utils {
     // milliseconds
     getPrintRand(min, max, str) {
         let rand = Math.floor(Math.random() * (max - min) + min);
-        log(str + " Sleeping: " + this.msToTime(rand) + " seconds", "blue");
+        log(str + " Sleeping: " + this.msToTime(rand), "blue");
         return rand;
     }
 
@@ -126,8 +126,11 @@ class Bumble {
     }
 }
 
-var main = async () => {
-    let bumble = new Bumble();
+var mainBody = async () => {
+
+    var d = new Date();
+    var timeHours = d.getHours();
+    if (timeHours < 8 || timeHours > 23) return;
 
     // random user amount: 5 - 20
     let randUserAmount = Math.floor(Math.random() * (20 - 5) + 5);
@@ -142,10 +145,24 @@ var main = async () => {
             return;
         }
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
+        // Sleeping between 2 - 5 seconds between user votes
         let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "randSleep for loop");
         await bumble.utils.sleep(randSleep);
     }
     log("Done", "blue");
+}
+
+var main = async () => {
+    let i = 1;
+    let bumble = new Bumble();
+    let HOUR = bumble.utils.MILLISECOND_TO_HOUR;
+
+    while (true) {
+        await mainBody();
+        let randSleep = bumble.utils.getPrintRand(HOUR, 2 * HOUR, "randSleep while loop #" + i);
+        i++;
+        await bumble.utils.sleep(randSleep);
+    }
 }
 
 
