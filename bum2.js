@@ -27,7 +27,7 @@ class Utils {
         this.BROKEN_CONDITIONS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
         this.MILLISECOND_TO_HOUR = 60 * 60 * 1000;
         this.HOUR_TO_MILLISECOND = 1 / (60 * 60 * 1000);
-        this.randSleepMain = this.getPrintRand(this.MILLISECOND_TO_HOUR * 2, this.MILLISECOND_TO_HOUR * 5, "Initial sleep");
+        //this.randSleepMain = this.getPrintRand(this.MILLISECOND_TO_HOUR * 2, this.MILLISECOND_TO_HOUR * 5, "Initial sleep");
 
         this.like = document.querySelector(".encounters-action--like");
         this.pass = document.querySelector(".encounters-action--dislike");
@@ -42,12 +42,19 @@ class Utils {
         let canceled = !elem.dispatchEvent(evt);
     }
 
+    calculateTimeDifference = timestamp => {
+
+    }
+
     sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     // milliseconds
     getPrintRand(min, max, str) {
         let rand = Math.floor(Math.random() * (max - min) + min);
-        log(str + " Sleeping: " + this.msToTime(rand), "blue");
+        let now = Date.now();
+        let futureTime = new Date(now + rand);
+        let until = futureTime.getHours() + ":" + futureTime.getMinutes() + ":" + futureTime.getSeconds();
+        log(str + " Sleeping: " + this.msToTime(rand) + " Until: " + until, "blue");
         return rand;
     }
 
@@ -146,7 +153,7 @@ var mainBody = async bumble => {
         }
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         // Sleeping between 2 - 5 seconds between user votes
-        let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "randSleep for loop");
+        let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "Sleeping between users");
         await bumble.utils.sleep(randSleep);
     }
     log("Done", "blue");
@@ -159,7 +166,7 @@ var main = async () => {
 
     while (true) {
         await mainBody(bumble);
-        let randSleep = bumble.utils.getPrintRand(HOUR, 2 * HOUR, "randSleep while loop #" + i);
+        let randSleep = bumble.utils.getPrintRand(2 * HOUR, 3 * HOUR, "Sleeping after run #" + i);
         i++;
         await bumble.utils.sleep(randSleep);
     }
