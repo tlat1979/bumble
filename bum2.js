@@ -40,7 +40,7 @@ class Utils {
             view: window
         });
         let canceled = !elem.dispatchEvent(evt);
-    }
+    };
 
     calculateTimeDifference = timestamp => {
 
@@ -83,6 +83,19 @@ class Bumble {
         this.user = {};
     }
 
+    scrollToButtom = async () => {
+        let userCard = document.querySelectorAll(".encounters-album__stories-container");
+        if (userCard && userCard[0]) {
+            let scrollAmount = document.querySelectorAll(".encounters-album__story");
+            scrollAmount = (scrollAmount && scrollAmount.length > 1) ?
+                scrollAmount.length - 1 : 0;
+            for (i = 100; i <= scrollAmount * 100; i += 100) {
+                userCard[0].style.transform = "translateY(-" + i + "%)";
+                await this.utils.sleep(1000);
+            }
+        }
+    }
+
     getUserDetails = () => {
         let nameAge = this.utils.getProtect("encounters-story-profile__name");
         nameAge = nameAge.split(',');
@@ -107,7 +120,8 @@ class Bumble {
         return true;
     }
 
-    isValidUser = () => {
+    isValidUser = async () => {
+        await this.scrollToButtom();
         let validAge = true;
         let validDistance = true;
         let validAbout = true;
@@ -151,9 +165,9 @@ var mainBody = async bumble => {
             log("NO USERS FOUND", "red");
             return;
         }
-        bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
+        await bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         // Sleeping between 2 - 5 seconds between user votes
-        let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "Sleeping between users");
+        let randSleep = bumble.utils.getPrintRand(7 * 1000, 18 * 1000, "Sleeping between users");
         await bumble.utils.sleep(randSleep);
     }
     log("Done", "blue");
@@ -171,6 +185,8 @@ var main = async () => {
         await bumble.utils.sleep(randSleep);
     }
 }
+
+
 
 
 // var repeatQuery = () => {
