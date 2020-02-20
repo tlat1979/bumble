@@ -1,0 +1,18 @@
+var getUrl = async url => {
+var response = await fetch(url)
+var data = await response.text()
+console.log(data)
+}
+
+var main = async () => {
+var friends = $$(".friendBrowserNameTitle a");
+friends.forEach(async f => {
+let url = f.href.split('?')
+console.log(f.title + " " + url[0])
+await getUrl(url[0]+"/about?section=relationship")
+
+})
+}
+
+
+$$("#pagelet_relationships ._vb-")[0].innerText
