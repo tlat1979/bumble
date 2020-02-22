@@ -17,4 +17,7 @@ var fbmain = async () => {
 
     console.log(doc);
 
+    // $$("div[data-sigil='undoable-action']") --> list of siggested users
+    // $$("[data-autoid='autoid_7']") --> profile link
+
 }
