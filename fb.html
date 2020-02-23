@@ -4,15 +4,29 @@ var data = await response.text()
 console.log(data)
 }
 
+// USING PAGE: https://m.facebook.com/friends/center/suggestions
+
 var main = async () => {
-var friends = $$(".friendBrowserNameTitle a");
+
+window.scroll({
+top: 4000,
+left: 0,
+behavior: 'smooth'
+});
+
+
+var friends = document.querySelectorAll("[data-sigil='undoable-action'] h3 a");
 friends.forEach(async f => {
-let url = f.href.split('?')
-console.log(f.title + " " + url[0])
-await getUrl(url[0]+"/about?section=relationship")
+let url = f.href.split('?');
+console.log(f.title + " " + url[0]);
+//await getUrl(url[0]+"/about?section=relationship")
+});
 
-})
+
+var friends = document.querySelectorAll("[data-sigil='undoable-action'] h1 a");
+friends.forEach(async f => {
+let url = f.href.split('?');
+console.log(f.title + " " + url[0]);
+//await getUrl(url[0]+"/about?section=relationship")
+});
 }
-
-
-$$("#pagelet_relationships ._vb-")[0].innerText
