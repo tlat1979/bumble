@@ -8,12 +8,16 @@ var getUrl = async url => {
 var main = async () => {
 
     // load more users
-    window.scroll({ top: 4000, left: 0, behavior: 'smooth' });
+    window.scroll({
+        top: 4000,
+        left: 0,
+        behavior: 'smooth'
+    });
 
     let user = {}
     let friends = document.querySelectorAll("[data-sigil='undoable-action'] h3 a, [data-sigil='undoable-action'] h1 a");
-    user.name = friends[0].text;
-    user.url = friends[0].href.split('?')[0];
+    user.name = friends[1].text;
+    user.url = friends[1].href.split('?')[0];
 
     let userAboutPage = await getUrl(user.url + "/about");
     let aboutPageDomParser = new DOMParser();
@@ -24,7 +28,15 @@ var main = async () => {
     user.aboutSections.forEach(section => {
         section.id != "" ?
             user[section.id] = section.textContent :
-            user[section.textContent] = section.textContent ;
+            user[section.textContent] = section.textContent;
+
+        if (section.id == "living") {
+            user.living = [];
+            let temp = section.querySelectorAll("a");
+            temp.forEach(c => user.living.push(c.text));
+        }
+
+        if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
 
         if (section.textContent == "Photos") {
             user.photos = []
@@ -36,7 +48,7 @@ var main = async () => {
     });
 
 
-    console.log(1);
+    console.log(user);
 
     //     friends.forEach(async f => {
     //         let url = f.href.split('?');
