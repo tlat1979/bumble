@@ -16,8 +16,8 @@ var main = async () => {
 
     let user = {}
     let friends = document.querySelectorAll("[data-sigil='undoable-action'] h3 a, [data-sigil='undoable-action'] h1 a");
-    user.name = friends[1].text;
-    user.url = friends[1].href.split('?')[0];
+    user.name = friends[8].text;
+    user.url = friends[8].href.split('?')[0];
 
     let userAboutPage = await getUrl(user.url + "/about");
     let aboutPageDomParser = new DOMParser();
@@ -26,6 +26,14 @@ var main = async () => {
     user.aboutSections = user.aboutPageDoc.querySelectorAll("[data-sigil='profile-card']");
 
     user.aboutSections.forEach(section => {
+        if (section.id == "" ) {
+           let mutualFriends = section.querySelectorAll("strong");
+           if (mutualFriends && mutualFriends.length > 0) {
+               user.mutualFriends = [];
+               mutualFriends.forEach(f => user.mutualFriends.push(f.textContent));
+           }                
+        }
+
         section.id != "" ?
             user[section.id] = section.textContent :
             user[section.textContent] = section.textContent;
@@ -35,14 +43,23 @@ var main = async () => {
             let temp = section.querySelectorAll("a");
             temp.forEach(c => user.living.push(c.text));
         }
+        
+        if (section.id == "family") user.family = section.querySelectorAll("a");
+        if (section.id == "relationship") user.relationship = section.querySelectorAll("h3");
+        if (section.id == "basic-info") user.info = section.querySelectorAll("._5cdv")[0].textContent;
 
         if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
+        if (section.id == "education") user.education = section.querySelectorAll("a")[1].text;
+
+         if (section.textContent == "Videos") {
+            user.Videos = [];
+         }
 
         if (section.textContent == "Photos") {
-            user.photos = []
+            user.Photos = []
 
             let temp = section.querySelectorAll("a i");
-            temp.forEach(t => user.photos.push(t.style.background.split('"')[1])) //[3].style.background.split('"');
+            temp.forEach(t => user.Photos.push(t.style.background.split('"')[1])) //[3].style.background.split('"');
             console.log(9);
         }
     });
