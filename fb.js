@@ -14,58 +14,64 @@ var main = async () => {
         behavior: 'smooth'
     });
 
-    let user = {}
+    let users = [];
     let friends = document.querySelectorAll("[data-sigil='undoable-action'] h3 a, [data-sigil='undoable-action'] h1 a");
-    user.name = friends[8].text;
-    user.url = friends[8].href.split('?')[0];
+    for (let i = 0; i < 3; i++) {
+        let user = {};
 
-    let userAboutPage = await getUrl(user.url + "/about");
-    let aboutPageDomParser = new DOMParser();
-    user.aboutPageDoc = aboutPageDomParser.parseFromString(userAboutPage, "text/html");
+        user.name = friends[i].text;
+        user.url = friends[i].href.split('?')[0];
 
-    user.aboutSections = user.aboutPageDoc.querySelectorAll("[data-sigil='profile-card']");
+        let userAboutPage = await getUrl(user.url + "/about");
+        let aboutPageDomParser = new DOMParser();
+        user.aboutPageDoc = aboutPageDomParser.parseFromString(userAboutPage, "text/html");
 
-    user.aboutSections.forEach(section => {
-        if (section.id == "" ) {
-           let mutualFriends = section.querySelectorAll("strong");
-           if (mutualFriends && mutualFriends.length > 0) {
-               user.mutualFriends = [];
-               mutualFriends.forEach(f => user.mutualFriends.push(f.textContent));
-           }                
-        }
+        user.aboutSections = user.aboutPageDoc.querySelectorAll("[data-sigil='profile-card']");
 
-        section.id != "" ?
-            user[section.id] = section.textContent :
-            user[section.textContent] = section.textContent;
+        user.aboutSections.forEach(section => {
+            if (section.id == "") {
+                let mutualFriends = section.querySelectorAll("strong");
+                if (mutualFriends && mutualFriends.length > 0) {
+                    user.mutualFriends = [];
+                    mutualFriends.forEach(f => user.mutualFriends.push(f.textContent));
+                }
+            }
 
-        if (section.id == "living") {
-            user.living = [];
-            let temp = section.querySelectorAll("a");
-            temp.forEach(c => user.living.push(c.text));
-        }
-        
-        if (section.id == "family") user.family = section.querySelectorAll("a");
-        if (section.id == "relationship") user.relationship = section.querySelectorAll("h3");
-        if (section.id == "basic-info") user.info = section.querySelectorAll("._5cdv")[0].textContent;
+            section.id != "" ?
+                user[section.id] = section.textContent :
+                user[section.textContent] = section.textContent;
 
-        if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
-        if (section.id == "education") user.education = section.querySelectorAll("a")[1].text;
+            if (section.id == "living") {
+                user.living = [];
+                let temp = section.querySelectorAll("a");
+                temp.forEach(c => user.living.push(c.text));
+            }
 
-         if (section.textContent == "Videos") {
-            user.Videos = [];
-         }
+            if (section.id == "family") user.family = section.querySelectorAll("a");
+            if (section.id == "relationship") user.relationship = section.querySelectorAll("h3");
+            if (section.id == "basic-info") user.info = section.querySelectorAll("._5cdv")[0].textContent;
 
-        if (section.textContent == "Photos") {
-            user.Photos = []
+            if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
+            if (section.id == "education") user.education = section.querySelectorAll("a")[1].text;
 
-            let temp = section.querySelectorAll("a i");
-            temp.forEach(t => user.Photos.push(t.style.background.split('"')[1])) //[3].style.background.split('"');
-            console.log(9);
-        }
-    });
+            if (section.textContent == "Videos") {
+                user.Videos = [];
+            }
+
+            if (section.textContent == "Photos") {
+                user.Photos = []
+
+                let temp = section.querySelectorAll("a i");
+                temp.forEach(t => user.Photos.push(t.style.background.split('"')[1])) //[3].style.background.split('"');
+                console.log(9);
+            }
+        });
+
+        users[i] = user;
+    }
 
 
-    console.log(user);
+    console.log(users);
 
     //     friends.forEach(async f => {
     //         let url = f.href.split('?');
