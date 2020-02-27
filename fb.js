@@ -81,7 +81,7 @@ var USERS = {
 
             if (section.id == "family") user.family = section.querySelectorAll("a");
             if (section.id == "relationship") user.relationship = section.querySelectorAll("h3");
-            if (section.id == "basic-info") user.info = section.querySelectorAll("._5cdv")[0].textContent;
+            if (section.id == "basic-info") user["basic-info"] = section.querySelectorAll("._5cdv")[0].textContent;
 
             if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
             if (section.id == "education") user.education = section.querySelectorAll("a")[1].text;
