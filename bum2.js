@@ -1,204 +1,124 @@
-var log = (message, level) => {
-    let now = new Date();
-    let time = "[" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "] ";
-    if (!level || (level != "green" && level != "red" && level != "blue")) {
-        console.log(time + message);
-        return;
-    }
-    switch (level) {
-        case "green":
-            console.log('%c' + time + message, 'background: #222; color: #bada55');
-            break;
-        case "red":
-            console.log('%c' + time + message, 'background: #222; color: #FF5733');
-            break;
-        case "blue":
-            console.log('%c' + time + message, 'background: #222; color: #33A8FF');
-            break;
-    }
-}
+// USING PAGE: https://m.facebook.com/friends/center/suggestions
 
-class Utils {
+// UTIL FUNCTIONS
 
-    constructor() {
-        this.MAX_AGE = 47;
-        this.MIN_AGE = 24
-        this.MAX_DISTANCE = 21;
-        this.BROKEN_CONDITIONS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
-        this.MILLISECOND_TO_HOUR = 60 * 60 * 1000;
-        this.HOUR_TO_MILLISECOND = 1 / (60 * 60 * 1000);
-        //this.randSleepMain = this.getPrintRand(this.MILLISECOND_TO_HOUR * 2, this.MILLISECOND_TO_HOUR * 5, "Initial sleep");
+var UTIL = {
 
-        this.like = document.querySelector(".encounters-action--like");
-        this.pass = document.querySelector(".encounters-action--dislike");
-    }
+    getRandomWait: () => {
+        const MIN = 5;
+        const MAX = 12;
+        let rand = randUserAmount = 1000 * Math.floor(Math.random() * (MAX - MIN) + MIN);
+    },
 
-    simulateClick = elem => {
-        let evt = new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-            view: window
+    sleep: ms => {
+        console.log("Sleeping " + ms / 1000 + " Seconds");
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    getUrl: async url => {
+        let response = await fetch(url);
+        let html = await response.text();
+        let aboutPageDomParser = new DOMParser();
+        return aboutPageDomParser.parseFromString(html, "text/html");
+
+    },
+
+    // load more users
+    scroll: () => {
+        window.scroll({
+            top: 4000,
+            left: 0,
+            behavior: 'smooth'
         });
-        let canceled = !elem.dispatchEvent(evt);
-    };
-
-    calculateTimeDifference = timestamp => {
-
-    }
-
-    sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-    // milliseconds
-    getPrintRand(min, max, str) {
-        let rand = Math.floor(Math.random() * (max - min) + min);
-        let now = Date.now();
-        let futureTime = new Date(now + rand);
-        let until = futureTime.getHours() + ":" + futureTime.getMinutes() + ":" + futureTime.getSeconds();
-        log(str + " Sleeping: " + this.msToTime(rand) + " Until: " + until, "blue");
-        return rand;
-    }
-
-    getProtect = className => {
-        var temp = document.querySelector("." + className);
-        return temp ? temp.textContent : "";
-    }
-
-    msToTime = duration => {
-        let milliseconds = parseInt((duration % 1000) / 100),
-            seconds = Math.floor((duration / 1000) % 60),
-            minutes = Math.floor((duration / (1000 * 60)) % 60),
-            hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-        hours = (hours < 10) ? "0" + hours : hours;
-        minutes = (minutes < 10) ? "0" + minutes : minutes;
-        seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-        return hours + ":" + minutes + ":" + seconds;
-    }
+    },
 }
 
-class Bumble {
-    constructor() {
-        this.utils = new Utils();
-        this.user = {};
-    }
 
-    scrollToButtom = async () => {
-        let userCard = document.querySelectorAll(".encounters-album__stories-container");
-        if (userCard && userCard[0]) {
-            let scrollAmount = document.querySelectorAll(".encounters-album__story");
-            scrollAmount = (scrollAmount && scrollAmount.length > 1) ?
-                scrollAmount.length - 1 : 0;
-            for (i = 100; i <= scrollAmount * 100; i += 100) {
-                userCard[0].style.transform = "translateY(-" + i + "%)";
-                await this.utils.sleep(1000);
-            }
-        }
-    }
+var USERS = {
 
-    getUserDetails = () => {
-        let nameAge = this.utils.getProtect("encounters-story-profile__name");
-        nameAge = nameAge.split(',');
-        this.user.name = nameAge[0];
-        if (this.user.name == "") return false;
-        this.user.age = nameAge[1].trim();
-        this.user.profession = this.utils.getProtect("encounters-story-profile__occupation");
-        this.user.education = this.utils.getProtect("encounters-story-profile__education");
-        this.user.about = this.utils.getProtect("encounters-story-about__text");
-        this.user.city = this.utils.getProtect("location-widget__town");
-        this.user.distance = this.utils.getProtect("location-widget__distance");
-        if (this.user.distance) {
-            let temp = this.user.distance.split(" ");
-            let temp1 = temp[0].split("~");
-            this.user.distance = (Array.isArray(temp1)) ? temp1[0] : temp1[1];
-        }
+    getSuggestions: () => document.querySelectorAll("[data-sigil='undoable-action'] h3 a, [data-sigil='undoable-action'] h1 a"),
 
-        // height, exercise, drink, smoke, pets, sign, religion
-        this.user.additionalInfo = [];
-        let additionalInfo = document.querySelectorAll(".pill__title");
-        additionalInfo.forEach(pill => this.user.additionalInfo.push(pill.innerText));
-        return true;
-    }
+    parseSuggestions: async suggestions => {
 
-    isValidUser = async () => {
-        await this.scrollToButtom();
-        let validAge = true;
-        let validDistance = true;
-        let validAbout = true;
-        if (this.user.age) {
-            validAge = this.user.age < this.utils.MAX_AGE && this.user.age > this.utils.MIN_AGE;
+        for await (i of Array.from(Array(3).keys())) {
+            let user = {};
+
+            user.name = suggestions[i].text;
+            user.url = suggestions[i].href.split('?')[0];
+
+            user.aboutPageDoc = await UTILS.getUrl(user.url + "/about");
+            user.aboutSections = user.aboutPageDoc.querySelectorAll("[data-sigil='profile-card']");
+            USERS.parseUserSections(user);
+            users[i] = user;
+
+            await UTILS.sleep(UTILS.getRandomWait());
+
         }
-        if (this.user.distance) {
-            validDistance = this.user.distance < this.utils.MAX_DISTANCE;
-        }
-        if (this.user.about) {
-            for (let i in this.utils.BROKEN_CONDITIONS) {
-                if ((this.user.about).includes(this.utils.BROKEN_CONDITIONS[i])) {
-                    validAbout = false;
-                    break;
+    },
+
+    parseUserSections: async user => {
+
+        user.aboutSections.forEach(section => {
+            if (section.id == "") {
+                let mutualFriends = section.querySelectorAll("strong");
+                if (mutualFriends && mutualFriends.length > 0) {
+                    user.mutualFriends = [];
+                    mutualFriends.forEach(f => user.mutualFriends.push(f.textContent));
                 }
             }
-        }
-        let details = "Name " + this.user.name + " | Age " + this.user.age + " | Distance " + this.user.distance + " | About " + this.user.about;
-        validAge && validDistance && validAbout ?
-            log("Liked: " + details, "green") :
-            log("Passed: " + details, "red");
-        return validAge && validDistance && validAbout;
-    }
-}
 
-var mainBody = async bumble => {
+            section.id != "" ?
+                user[section.id] = section.textContent :
+                user[section.textContent] = section.textContent;
 
-    var d = new Date();
-    var timeHours = d.getHours();
-    if (timeHours < 8 || timeHours > 23) return;
+            if (section.id == "living") {
+                user.living = [];
+                let temp = section.querySelectorAll("a");
+                temp.forEach(c => user.living.push(c.text));
+            }
 
-    // random user amount: 5 - 20
-    let randUserAmount = Math.floor(Math.random() * (20 - 5) + 5);
-    log("Main addressing: " + randUserAmount + " of users", "blue");
-    let arr = Array.from(Array(randUserAmount).keys())
+            if (section.id == "family") user.family = section.querySelectorAll("a");
+            if (section.id == "relationship") user.relationship = section.querySelectorAll("h3");
+            if (section.id == "basic-info") user.info = section.querySelectorAll("._5cdv")[0].textContent;
 
-    for await (i of arr) {
-        log("User #" + (i + 1) + " out of " + randUserAmount, "blue");
-        let ret = bumble.getUserDetails();
-        if (!ret) {
-            log("NO USERS FOUND", "red");
-            return;
-        }
-        await bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
-        // Sleeping between 2 - 5 seconds between user votes
-        let randSleep = bumble.utils.getPrintRand(7 * 1000, 18 * 1000, "Sleeping between users");
-        await bumble.utils.sleep(randSleep);
-    }
-    log("Done", "blue");
+            if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
+            if (section.id == "education") user.education = section.querySelectorAll("a")[1].text;
+
+            if (section.textContent == "Videos") {
+                user.Videos = [];
+            }
+
+            if (section.textContent == "Photos") {
+                user.Photos = []
+
+                let temp = section.querySelectorAll("a i");
+                temp.forEach(t => user.Photos.push(t.style.background.split('"')[1])) //[3].style.background.split('"');
+                console.log(9);
+            }
+        });
+    },
 }
 
 var main = async () => {
-    let i = 1;
-    let bumble = new Bumble();
-    let HOUR = bumble.utils.MILLISECOND_TO_HOUR;
 
-    while (true) {
-        await mainBody(bumble);
-        let randSleep = bumble.utils.getPrintRand(2 * HOUR, 3 * HOUR, "Sleeping after run #" + i);
-        i++;
-        await bumble.utils.sleep(randSleep);
-    }
+    UTILS.scroll();
+    let users = [];
+    let suggestions = USERS.getSuggestions();
+    let parsedSuggestions = USERS.parseSuggestions(suggestions);
+    console.log(users);
 }
 
 
 
 
-// var repeatQuery = () => {
-//     let bumble = new Bumble();
-//     var HOUR = bumble.utils.MILLISECOND_TO_HOUR;
-//     setInterval(() => {
-//         var d = new Date();
-//         var timeHours = d.getHours();
-//         if (timeHours < 8 || timeHours > 23) return;
+//     friends.forEach(async f => {
+//         let url = f.href.split('?');
+//         console.log(f.text + " " + url[0]);
 
-//         randSleepMain = bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval top");
-//         log("SetInterval sleeps: " + randSleepMain * HOUR + " Hours");
-//         main();
-//     }, bumble.utils.getPrintRand(HOUR * 2, HOUR * 5, " setInterval bottom"));
-// }
+//         //$$("[data-sigil='profile-card']")
+
+
+//         var res = await getUrl(url[0]+"/about")
+//         console.log(res);
+//         //https://m.facebook.com/profile.php?v=info&id=100006567487010
+//     });
