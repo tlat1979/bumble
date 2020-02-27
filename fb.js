@@ -7,7 +7,7 @@ var UTILS = {
     getRandomWait: () => {
         const MIN = 5;
         const MAX = 12;
-        let rand = randUserAmount = 1000 * Math.floor(Math.random() * (MAX - MIN) + MIN);
+        return 1000 * Math.floor(Math.random() * (MAX - MIN) + MIN);
     },
 
     sleep: ms => {
@@ -36,68 +36,74 @@ var UTILS = {
 
 var USERS = {
 
-    getSuggestions: () => document.querySelectorAll("[data-sigil='undoable-action'] h3 a, [data-sigil='undoable-action'] h1 a"),
+        getSuggestions: () => document.querySelectorAll("[data-sigil='undoable-action'] h3 a, [data-sigil='undoable-action'] h1 a"),
 
-    parseSuggestions: async suggestions => {
-        parsedSuggestions = [];
+        parseSuggestions: async suggestions => {
+            parsedSuggestions = [];
 
-        for await (i of Array.from(Array(3).keys())) {
-            let user = {};
+            for await (i of Array.from(Array(3).keys())) {
+                let user = {};
 
-            user.name = suggestions[i].text;
-            user.url = user.url = suggestions[i].href.split('?')[0];
+                user.name = suggestions[i].text;
+                user.url = user.url = suggestions[i].href.split('?')[0];
 
-            user.aboutPageDoc = await UTILS.getUrl(user.url + "/about");
-            user.aboutSections = user.aboutPageDoc.querySelectorAll("[data-sigil='profile-card']");
-            USERS.parseUserSections(user);
-            parsedSuggestions[i] = user;
+                user.aboutPageDoc = await UTILS.getUrl(user.url + "/about");
+                user.aboutSections = user.aboutPageDoc.querySelectorAll("[data-sigil='profile-card']");
+                USERS.parseUserSections(user);
+                parsedSuggestions[i] = user;
 
-            await UTILS.sleep(UTILS.getRandomWait());
+                await UTILS.sleep(UTILS.getRandomWait());
 
-        }
-        return parsedSuggestions;
-    },
-
-    parseUserSections: async user => {
-
-        user.aboutSections.forEach(section => {
-            if (section.id == "") {
-                let mutualFriends = section.querySelectorAll("strong");
-                if (mutualFriends && mutualFriends.length > 0) {
-                    user.mutualFriends = [];
-                    mutualFriends.forEach(f => user.mutualFriends.push(f.textContent));
-                }
             }
+            return parsedSuggestions;
+        },
 
-            section.id != "" ?
-                user[section.id] = section.textContent :
-                user[section.textContent] = section.textContent;
+        parseUserSections: async user => {
 
-            if (section.id == "living") {
-                user.living = [];
-                let temp = section.querySelectorAll("a");
-                temp.forEach(c => user.living.push(c.text));
-            }
+            user.aboutSections.forEach(section => {
 
-            if (section.id == "family") user.family = section.querySelectorAll("a");
-            if (section.id == "relationship") user.relationship = section.querySelectorAll("h3");
-            if (section.id == "basic-info") user["basic-info"] = section.querySelectorAll("._5cdv")[0].textContent;
+                    if (section.id != "") {
+                        switch (section.id) {
+                            case "family":
+                                user.family = section.querySelectorAll("a");
+                                break;
+                            case "relationship":
+                                user.relationship = section.querySelectorAll("._52ja._5cds._5cdt")[0].textContent;
+                                break;
+                            case "basic-info":
+                                user["basic-info"] = section.querySelectorAll("._5cdv")[0].textContent;
+                                break;
+                            case "work":
+                                user.work = section.querySelectorAll("a")[1].text;
+                                break;
+                            case "education":
+                                user.education = section.querySelectorAll("a")[1].text;
+                                break;
+                            case "Videos":
+                                user.Videos = []
+                                break;
+                            case "Photos":
+                                user.Photos = []
+                                var temp = section.querySelectorAll("a i");
+                                temp.forEach(t => user.Photos.push(t.style.background.split('"')[1]));
+                                break;
+                            case "living":
+                                user.living = [];
+                                var temp = section.querySelectorAll("a");
+                                temp.forEach(c => user.living.push(c.text));
+                                break;
+                        }
+                    }
 
-            if (section.id == "work") user.work = section.querySelectorAll("a")[1].text;
-            if (section.id == "education") user.education = section.querySelectorAll("a")[1].text;
-
-            if (section.textContent == "Videos") {
-                user.Videos = [];
-            }
-
-            if (section.textContent == "Photos") {
-                user.Photos = []
-
-                let temp = section.querySelectorAll("a i");
-                temp.forEach(t => user.Photos.push(t.style.background.split('"')[1])) //[3].style.background.split('"');
-                console.log(9);
-            }
-        });
+                    else {
+                        let mutualFriends = section.querySelectorAll("strong");
+                        if (mutualFriends && mutualFriends.length > 0) {
+                            user.mutualFriends = [];
+                            mutualFriends.forEach(f => user.mutualFriends.push(f.textContent));
+                        }
+                    }
+                
+            });
     },
 }
 
