@@ -165,7 +165,7 @@ var mainBody = async bumble => {
             log("NO USERS FOUND", "red");
             return;
         }
-        bumble.utils.scrollToButtom();
+        await bumble.utils.scrollToButtom();
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         // Sleeping between 2 - 5 seconds between user votes
         let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "Sleeping between users");
