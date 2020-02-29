@@ -33,6 +33,19 @@ class Utils {
         this.pass = document.querySelector(".encounters-action--dislike");
     }
 
+    scrollToButtom = async () => {
+        let userCard = document.querySelectorAll(".encounters-album__stories-container");
+        if (userCard && userCard[0]) {
+            let scrollAmount = document.querySelectorAll(".encounters-album__story");
+            scrollAmount = (scrollAmount && scrollAmount.length > 1) ?
+                scrollAmount.length - 1 : 0;
+            for (i = 100; i <= scrollAmount * 100; i += 100) {
+                userCard[0].style.transform = "translateY(-" + i + "%)";
+                await this.sleep(1000);
+            }
+        }
+    }
+
     simulateClick = elem => {
         let evt = new MouseEvent('click', {
             bubbles: true,
@@ -111,6 +124,7 @@ class Bumble {
         let validAge = true;
         let validDistance = true;
         let validAbout = true;
+
         if (this.user.age) {
             validAge = this.user.age < this.utils.MAX_AGE && this.user.age > this.utils.MIN_AGE;
         }
@@ -151,6 +165,7 @@ var mainBody = async bumble => {
             log("NO USERS FOUND", "red");
             return;
         }
+        bumble.utils.scrollToButtom();
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         // Sleeping between 2 - 5 seconds between user votes
         let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "Sleeping between users");
