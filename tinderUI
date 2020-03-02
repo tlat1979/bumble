@@ -1,0 +1,10 @@
+$$("[aria-label='Like']")[0].click()
+$$("[aria-label='Nope']")[0].click()
+
+
+a = $$(".recCard__info");
+a.forEach(b => console.log(b.textContent))
+
+a[0] next
+a[1] current
+a[2] prev
