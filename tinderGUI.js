@@ -1,3 +1,23 @@
+var log = (message, level) => {
+    let now = new Date();
+    let time = "[" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "] ";
+    if (!level || (level != "green" && level != "red" && level != "blue")) {
+        console.log(time + message);
+        return;
+    }
+    switch (level) {
+        case "green":
+            console.log('%c' + time + message, 'background: #222; color: #bada55');
+            break;
+        case "red":
+            console.log('%c' + time + message, 'background: #222; color: #FF5733');
+            break;
+        case "blue":
+            console.log('%c' + time + message, 'background: #222; color: #33A8FF');
+            break;
+    }
+}
+
 class User {
 
     constructor() {
@@ -29,21 +49,21 @@ class User {
         let validDistance = true;
         let validAbout = true;
 
-        if (this.user.age) {
+        if (this.age) {
             validAge = this.age < this.MAX_AGE && this.age > this.MIN_AGE;
         }
-        if (this.user.distance) {
+        if (this.distance) {
             validDistance = this.distance < this.MAX_DISTANCE;
         }
         if (this.about) {
             for (let i in this.BROKEN_CONDITIONS) {
-                if ((this.user.about).includes(this.BROKEN_CONDITIONS[i])) {
+                if ((this.about).includes(this.BROKEN_CONDITIONS[i])) {
                     validAbout = false;
                     break;
                 }
             }
         }
-        let details = "Name " + this.user.name + " | Age " + this.user.age + " | Distance " + this.user.distance + " | About " + this.user.about;
+        let details = "Name " + this.name + " | Age " + this.age + " | Distance " + this.distance + " | About " + this.about;
         validAge && validDistance && validAbout ?
             log("Liked: " + details, "green") :
             log("Passed: " + details, "red");
@@ -65,6 +85,7 @@ var main = () => {
     var users, name, age, about = '';
 
     var user = new User();
-    if (user.getUserDetails())
+    if (user.getUserDetails() && user.isValidUser())
         user.printUser();
-} 
+}
+
