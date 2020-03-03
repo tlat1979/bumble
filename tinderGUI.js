@@ -28,6 +28,9 @@ class User {
 
     }
 
+    likeUser = () => $$("[aria-label='Like']")[0].click();
+    passUser = () => $$("[aria-label='Nope']")[0].click();
+
     getUserDetails = () => {
         try {
             this.users = $$(".recCard__info")[1] || [];
@@ -52,8 +55,9 @@ class User {
         if (this.age) {
             validAge = this.age < this.MAX_AGE && this.age > this.MIN_AGE;
         }
+        ////////////////////////// FIX ME DISTANCE //////////////////////////////
         if (this.distance) {
-            validDistance = this.distance < this.MAX_DISTANCE;
+            //validDistance = this.distance < this.MAX_DISTANCE;
         }
         if (this.about) {
             for (let i in this.BROKEN_CONDITIONS) {
@@ -85,7 +89,7 @@ var main = () => {
     var users, name, age, about = '';
 
     var user = new User();
-    if (user.getUserDetails() && user.isValidUser())
-        user.printUser();
+    user.getUserDetails() && user.isValidUser() ?
+        user.likeUser() : user.passUser();
 }
 
