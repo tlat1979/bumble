@@ -1,5 +1,5 @@
-$$("[aria-label='Like']")[0].click()
-$$("[aria-label='Nope']")[0].click()
+// $$("[aria-label='Like']")[0].click()
+// $$("[aria-label='Nope']")[0].click()
 
 
 
@@ -7,12 +7,14 @@ $$("[aria-label='Nope']")[0].click()
 
 
 class User {
-    consructor(name = "", age = 0, about = "") {
-        this.name, this.age, this.about = name, age, about;
+    constructor(options) {
+        this.name = options.name || "N/A";
+        this.age = options.age || 0;
+        this.about = options.about || "N/A";
     };
 
 
-    printUser = () => {
+    printUser() {
         console.log("Name: " + this.name + " Age: " + this.age + " About: " + this.about);
     };
 }
@@ -31,7 +33,12 @@ var main = () => {
         return;
     }
 
-    var user = new User(name, age, about);
+    var user = new User({
+        name: name,
+        age: age,
+        about: about
+    });
+
     user.printUser();
 
 
