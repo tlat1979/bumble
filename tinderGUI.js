@@ -32,6 +32,11 @@ class User {
     passUser = () => $$("[aria-label='Nope']")[0].click();
 
     getUserDetails = () => {
+
+                // grt more details: $$('svg > title')[1].parentElement.parentElement.click()
+
+
+
         try {
             this.users = $$(".recCard__info")[1] || [];
             this.name = this.users.children[0].children[0].children[0].textContent || "";
@@ -55,6 +60,10 @@ class User {
         if (this.age) {
             validAge = this.age < this.MAX_AGE && this.age > this.MIN_AGE;
         }
+
+
+        // grt more details: $$('svg > title')[1].parentElement.parentElement.click()
+
         ////////////////////////// FIX ME DISTANCE //////////////////////////////
         if (this.distance) {
             //validDistance = this.distance < this.MAX_DISTANCE;
@@ -89,7 +98,8 @@ var main = () => {
     var users, name, age, about = '';
 
     var user = new User();
-    user.getUserDetails() && user.isValidUser() ?
-        user.likeUser() : user.passUser();
+    user.getUserDetails() && user.isValidUser() // ?
+        // user.likeUser() : user.passUser();
+        console.log(33333);
 }
 
