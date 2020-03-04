@@ -32,17 +32,14 @@ class User {
     passUser = () => $$("[aria-label='Nope']")[0].click();
 
     getUserDetails = () => {
-
-                // grt more details: $$('svg > title')[1].parentElement.parentElement.click()
-
-
-
         try {
+            var extendedInfo = $$(".focus-button-style > svg")[0].parentElement.click()
             this.users = $$(".recCard__info")[1] || [];
             this.name = this.users.children[0].children[0].children[0].textContent || "";
             this.age = this.users.children[0].children[0].children[1].textContent || 0;
             this.about = this.users.children[1].textContent || "";
             this.distance = $$(".Row").length > 0 ? $$(".Row")[0].textContent : 0;
+            if (this.distance) this.distance = this.distance.split(' ')[0];
             this.moreInfo = $$(".Row").length > 1 ? $$(".Row")[1].textContent : "";
             return true;
         }
