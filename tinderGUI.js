@@ -31,9 +31,13 @@ class User {
     likeUser = () => $$("[aria-label='Like']")[0].click();
     passUser = () => $$("[aria-label='Nope']")[0].click();
 
-    getUserDetails = () => {
+    sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+
+    getUserDetails = async () => {
         try {
-            var extendedInfo = $$(".focus-button-style > svg")[0].parentElement.click()
+            var extendedInfo = $$(".focus-button-style > svg")[0].parentElement.click();
+            await this.sleep(1000);
             this.users = $$(".recCard__info")[1] || [];
             this.name = this.users.children[0].children[0].children[0].textContent || "";
             this.age = this.users.children[0].children[0].children[1].textContent || 0;
@@ -91,11 +95,11 @@ class User {
     }
 }
 
-var main = () => {
+var main = async () => {
     var users, name, age, about = '';
 
     var user = new User();
-    user.getUserDetails() && user.isValidUser() // ?
+    await user.getUserDetails() && user.isValidUser() // ?
         // user.likeUser() : user.passUser();
         console.log(33333);
 }
