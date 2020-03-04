@@ -33,18 +33,28 @@ class User {
 
     sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+    getOrNone = query => $$(query) || '';
+
 
     getUserDetails = async () => {
         try {
-            var extendedInfo = $$(".focus-button-style > svg")[0].parentElement.click();
-            await this.sleep(1000);
-            this.users = $$(".recCard__info")[1] || [];
-            this.name = this.users.children[0].children[0].children[0].textContent || "";
-            this.age = this.users.children[0].children[0].children[1].textContent || 0;
-            this.about = this.users.children[1].textContent || "";
-            this.distance = $$(".Row").length > 0 ? $$(".Row")[0].textContent : 0;
-            if (this.distance) this.distance = this.distance.split(' ')[0];
-            this.moreInfo = $$(".Row").length > 1 ? $$(".Row")[1].textContent : "";
+            // click *i* for more information
+            $$(".focus-button-style > svg")[0].parentElement.click();
+            this.name = $$("h1")[0].textContent
+            this.moreInfo = $$(".Row");
+            this.about = $$(".BreakWord")[0].textContent
+            this.age = $$(".Ell")[0].parentElement.children[1].textContent
+
+            this.distance = 0;
+            this.extraInfo = [];
+            if (this.moreInfo && this.moreInfo.length > 0) {
+                this.moreInfo.forEach(row => {
+                    let dis = row.textContent;
+                    dis.includes("kilometers") ?
+                        this.distance = dis.split(" ")[0] :
+                        this.extraInfo.push(row.textContent);
+                });
+            }
             return true;
         }
         catch (e) {
@@ -62,12 +72,8 @@ class User {
             validAge = this.age < this.MAX_AGE && this.age > this.MIN_AGE;
         }
 
-
-        // grt more details: $$('svg > title')[1].parentElement.parentElement.click()
-
-        ////////////////////////// FIX ME DISTANCE //////////////////////////////
         if (this.distance) {
-            //validDistance = this.distance < this.MAX_DISTANCE;
+            validDistance = this.distance < this.MAX_DISTANCE;
         }
         if (this.about) {
             for (let i in this.BROKEN_CONDITIONS) {
@@ -100,7 +106,7 @@ var main = async () => {
 
     var user = new User();
     await user.getUserDetails() && user.isValidUser() // ?
-        // user.likeUser() : user.passUser();
-        console.log(33333);
+    // user.likeUser() : user.passUser();
+    console.log(user);
 }
 
