@@ -38,13 +38,25 @@ class User {
         try {
             var extendedInfo = $$(".focus-button-style > svg")[0].parentElement.click();
             await this.sleep(1000);
-            this.users = $$(".recCard__info")[1] || [];
-            this.name = this.users.children[0].children[0].children[0].textContent || "";
-            this.age = this.users.children[0].children[0].children[1].textContent || 0;
-            this.about = this.users.children[1].textContent || "";
-            this.distance = $$(".Row").length > 0 ? $$(".Row")[0].textContent : 0;
-            if (this.distance) this.distance = this.distance.split(' ')[0];
-            this.moreInfo = $$(".Row").length > 1 ? $$(".Row")[1].textContent : "";
+            
+            this.name = document.querySelectorAll("h1")[0].textContent;
+            this.age = document.querySelectorAll("h1")[0].parentElement.parentElement.children[1].textContent;
+            
+            this.moreInfo = [];
+            let moreInfo = document.querySelectorAll(".Row");
+            moreInfo.forEach(e => this.moreInfo.push(e.textContent));
+
+            this.about = document.querySelectorAll(".BreakWord")[0].textContent;
+            
+
+            
+            // this.users = $$(".recCard__info")[1] || [];
+            // this.name = this.users.children[0].children[0].children[0].textContent || "";
+            // this.age = this.users.children[0].children[0].children[1].textContent || 0;
+            // this.about = this.users.children[1].textContent || "";
+            // this.distance = $$(".Row").length > 0 ? $$(".Row")[0].textContent : 0;
+            // if (this.distance) this.distance = this.distance.split(' ')[0];
+            // this.moreInfo = $$(".Row").length > 1 ? $$(".Row")[1].textContent : "";
             return true;
         }
         catch (e) {
@@ -101,6 +113,6 @@ var main = async () => {
     var user = new User();
     await user.getUserDetails() && user.isValidUser() // ?
         // user.likeUser() : user.passUser();
-        console.log(33333);
+        console.log(user);
 }
 
