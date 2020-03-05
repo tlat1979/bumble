@@ -18,6 +18,11 @@ var log = (message, level) => {
     }
 }
 
+var getTextOrNone = query => {
+    let result = document.querySelectorAll(query);
+    return (result && result[0] && result[0].textContent) ? result[0].textContent : '';
+}
+
 class User {
 
     constructor() {
@@ -28,48 +33,34 @@ class User {
 
     }
 
-    likeUser = () => $$("[aria-label='Like']")[0].click();
-    passUser = () => $$("[aria-label='Nope']")[0].click();
+    likeUser = () => document.querySelectorAll("[aria-label='Like']")[0].click();
+    passUser = () => document.querySelectorAll("[aria-label='Nope']")[0].click();
 
     sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    getOrNone = query => $$(query) || '';
-
-
     getUserDetails = async () => {
         try {
-            var extendedInfo = $$(".focus-button-style > svg")[0].parentElement.click();
+            // click *i* for more information
+            document.querySelectorAll(".focus-button-style > svg")[0].parentElement.click();
             await this.sleep(1000);
             
-            this.name = document.querySelectorAll("h1")[0].textContent;
+            this.name = getTextOrNone('h1');
             this.age = document.querySelectorAll("h1")[0].parentElement.parentElement.children[1].textContent;
             
             this.moreInfo = [];
+            this.distance = 0;
             let moreInfo = document.querySelectorAll(".Row");
-            moreInfo.forEach(e => this.moreInfo.push(e.textContent));
+            if (moreInfo && moreInfo.length > 0) {
+                moreInfo.forEach(e => {
+                    let distance = e.textContent;
+                    distance.includes("kilometers") ?
+                        this.distance = distance.split(" ")[0] :
+                        this.moreInfo.push(distance);
+                });
+            }
 
-            this.about = document.querySelectorAll(".BreakWord")[0].textContent;
+            this.about = getTextOrNone('.BreakWord');
             
-
-            ////////////// NEW CODE ////////////////
-            // click *i* for more information
-            // $$(".focus-button-style > svg")[0].parentElement.click();
-            // this.name = $$("h1")[0].textContent
-            // this.moreInfo = $$(".Row");
-            // this.about = $$(".BreakWord")[0].textContent
-            // this.age = $$(".Ell")[0].parentElement.children[1].textContent
-
-            // this.distance = 0;
-            // this.extraInfo = [];
-            // if (this.moreInfo && this.moreInfo.length > 0) {
-            //     this.moreInfo.forEach(row => {
-            //         let dis = row.textContent;
-            //         dis.includes("kilometers") ?
-            //             this.distance = dis.split(" ")[0] :
-            //             this.extraInfo.push(row.textContent);
-            //     });
-            // }
-
             return true;
         }
         catch (e) {
@@ -124,3 +115,4 @@ var main = async () => {
 
     // user.likeUser() : user.passUser();
     console.log(user);
+}
