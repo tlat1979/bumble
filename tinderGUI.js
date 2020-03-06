@@ -43,10 +43,10 @@ class User {
             // click *i* for more information
             document.querySelectorAll(".focus-button-style > svg")[0].parentElement.click();
             await this.sleep(1000);
-            
+
             this.name = getTextOrNone('h1');
             this.age = document.querySelectorAll("h1")[0].parentElement.parentElement.children[1].textContent;
-            
+
             this.moreInfo = [];
             this.distance = 0;
             let moreInfo = document.querySelectorAll(".Row");
@@ -60,7 +60,7 @@ class User {
             }
 
             this.about = getTextOrNone('.BreakWord');
-            
+
             return true;
         }
         catch (e) {
@@ -107,12 +107,41 @@ class User {
     }
 }
 
+var addressRandUsers = async () => {
+
+    const MIN_USERS = 3
+    const MAX_USERS = 12
+    const MIN_SLEEP = 5 * 1000 // 3 seconds 
+    const MAX_SLEEP = 13 * 1000 // 7 seconds
+
+    let randUsers = Math.floor(Math.random() * (MAX_USERS - MIN_USERS) + MIN_USERS);
+    log("Addressing: " + randUsers + " Users");
+
+
+    for (let i = 0; i < randUsers; i++) {
+
+        var user = new User();
+        await user.getUserDetails() && user.isValidUser() ?
+            user.likeUser() :
+            user.passUser();
+
+        let randSleep = Math.floor(Math.random() * (MAX_SLEEP - MIN_SLEEP) + MIN_SLEEP);
+        log("User #" + (i + 1) + " Complete. Sleeping Between Users: " + Math.floor(randSleep / 1000) + " Seconds");
+        await user.sleep(randSleep);
+    }
+}
+
 var main = async () => {
-    var users, name, age, about = '';
-
+    const HOUR = 60 * 60 * 1000 // 1 hour in milli
+    const MIN_SLEEP = 1 * HOUR // 1 hour 
+    const MAX_SLEEP = 3 * HOUR // 3 hours
+    let i = 0;
     var user = new User();
-    await user.getUserDetails() && user.isValidUser() // ?
-
-    // user.likeUser() : user.passUser();
-    console.log(user);
+    while (true) {
+        i++;
+        await addressRandUsers();
+        let rand = Math.floor(Math.random() * (MAX_SLEEP - MIN_SLEEP) + MIN_SLEEP);
+        log("Run #" + i + " Complete. Sleeping between runs: " + Math.floor(rand / HOUR) + " Hours");
+        await user.sleep(rand);
+    }
 }
