@@ -114,6 +114,10 @@ var addressRandUsers = async () => {
     const MIN_SLEEP = 5 * 1000 // 3 seconds 
     const MAX_SLEEP = 13 * 1000 // 7 seconds
 
+    var d = new Date();
+    var timeHours = d.getHours();
+    if (timeHours < 8 || timeHours > 23) return;
+
     let randUsers = Math.floor(Math.random() * (MAX_USERS - MIN_USERS) + MIN_USERS);
     log("Addressing: " + randUsers + " Users");
 
