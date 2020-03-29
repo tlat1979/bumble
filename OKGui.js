@@ -5,6 +5,12 @@ var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 var getUserDetails = async userId => {
     var user = {};
 
+    // User: name, age, location
+    user.name = window.document.querySelectorAll(".cardsummary-reflux-realname")[0].textContent;
+    user.age = window.document.querySelectorAll(".cardsummary-reflux-age")[0].textContent;
+    user.location = window.document.querySelectorAll(".cardsummary-reflux-location")[0].textContent;
+    user.matchPercentage = window.document.querySelectorAll(".cardsummary-reflux-match-pct")[0].textContent;
+
     // User Photos
     user.photos = [];
     var userPhotos = window.document.querySelectorAll(".qmcard-contents .image_wrapper > img");
@@ -20,17 +26,18 @@ var getUserDetails = async userId => {
     user.details = [];
     var userDetails = win.document.querySelectorAll(".matchprofile-details-section");
     for (details of userDetails) {
-        user.details.push(details.textContent);
+        user.details.push(details.innerText);
     }
 
     // User extended info (essays)
     var profileEssays = win.document.querySelectorAll(".profile-essay");
     user.essays = [];
     for (essay of profileEssays) {
-        user.essays.push(essay.textContent);
+        user.essays.push(essay.innerText);
     }
 
     win.close();
+    return user;
 }
 
 var main = async () => {
@@ -39,3 +46,4 @@ var main = async () => {
 }
 
 
+main();
