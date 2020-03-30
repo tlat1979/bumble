@@ -1,3 +1,20 @@
+var keyboardEvent = document.createEvent("KeyboardEvent");
+var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
+
+keyboardEvent[initMethod](
+    "input", // event type: keydown, keyup, keypress
+    true,      // bubbles
+    true,      // cancelable
+    window,    // view: should be window
+    false,     // ctrlKey
+    false,     // altKey
+    false,     // shiftKey
+    false,     // metaKey
+    83,        // keyCode: unsigned long - the virtual key code, else 0
+    0          // charCode: unsigned long - the Unicode character associated with the depressed key, else 0
+);
+
+
 // General sleep function
 var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -40,10 +57,37 @@ var getUserDetails = async userId => {
     return user;
 }
 
+// Like / Pass from doubletake
+var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-like-button")[0].click();
+var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
+
+// Like / Pass from User Profile
+var likeUserDoubleTake = () => window.document.querySelectorAll("#like-button")[0].click();
+var passUserDoubleTake = () => window.document.querySelectorAll("#pass-button")[0].click();
+
+var sendMsg = async msg => {
+    var newStr = "";
+
+    // Inputing the msg letter by letter to simulate a real user
+    [...msg].forEach(async c => {
+        await sleep(100);
+        newStr += c;
+        window.document.querySelectorAll(".messenger-composer")[0].value = newStr;
+        window.document.querySelectorAll(".messenger-composer")[0].dispatchEvent(keyboardEvent);
+        console.log(newStr);
+    });
+
+    // Sending the message
+    window.document.querySelectorAll(".messenger-toolbar-send")[0].click();
+}
+
+
 var main = async () => {
     var user = await getUserDetails("7340335320965521072");
     console.log(user);
+    sendMsg("Hi! :)");
 }
 
 
 main();
+
