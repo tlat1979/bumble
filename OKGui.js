@@ -83,9 +83,15 @@ var sendMsg = async msg => {
 
 
 var main = async () => {
-    var user = await getUserDetails("7340335320965521072");
+    // Assuming the DoubleTake page is open
+    // Getting the current user ID
+    let a = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
+    let b = a.split("/");
+    let c = b[b.length - 1];
+    let d = c.split("?")[0];
+
+    var user = await getUserDetails(d);
     console.log(user);
-    sendMsg("Hi! :)");
 }
 
 
