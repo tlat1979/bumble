@@ -62,8 +62,8 @@ var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-lik
 var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
 
 // Like / Pass from User Profile
-var likeUserDoubleTake = () => window.document.querySelectorAll("#like-button")[0].click();
-var passUserDoubleTake = () => window.document.querySelectorAll("#pass-button")[0].click();
+var likeUserProfile = () => window.document.querySelectorAll("#like-button")[0].click();
+var passUserProfile = () => window.document.querySelectorAll("#pass-button")[0].click();
 
 var sendMsg = async msg => {
     var newStr = "";
