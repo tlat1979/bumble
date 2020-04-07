@@ -21,7 +21,7 @@ keyboardEvent[initMethod](
 var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // This function assumes that it rund of the doubleTake page 
-var getUserDetails = async userId => {
+var getUserDetails = async (userId, win) => {
     var user = {};
 
     // User: name, age, location
@@ -37,10 +37,6 @@ var getUserDetails = async userId => {
         user.photos.push(photo.src);
     }
 
-    // Open a new window for rendering the user profile
-    var win = window.open("https://www.okcupid.com/profile/" + userId + "?cf=quickmatch", "xxxx", "height=200,width=200");
-    await sleep(10000);
-
     // User basic info    
     user.details = [];
     var userDetails = win.document.querySelectorAll(".matchprofile-details-section");
@@ -55,7 +51,6 @@ var getUserDetails = async userId => {
         user.essays.push(essay.innerText);
     }
 
-    win.close();
     return user;
 }
 
@@ -64,27 +59,28 @@ var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-lik
 var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
 
 // Like / Pass from User Profile
-var likeUserDoubleTake = () => window.document.querySelectorAll("#like-button")[0].click();
-var passUserDoubleTake = () => window.document.querySelectorAll("#pass-button")[0].click();
+var likeUserFromProfile = () => window.document.querySelectorAll("#like-button")[0].click();
+var passUserFromProfile = () => window.document.querySelectorAll("#pass-button")[0].click();
 
-var sendMsg = async msg => {
+var sendMsg = async (msg, win) => {
     var newStr = "";
 
     // Inputing the msg letter by letter to simulate a real user
     [...msg].forEach(async c => {
         await sleep(100);
         newStr += c;
-        window.document.querySelectorAll(".messenger-composer")[0].value = newStr;
-        window.document.querySelectorAll(".messenger-composer")[0].dispatchEvent(keyboardEvent);
+        win.document.querySelectorAll(".messenger-composer")[0].value = newStr;
+        win.document.querySelectorAll(".messenger-composer")[0].dispatchEvent(keyboardEvent);
         console.log(newStr);
     });
 
     // Sending the message
-    window.document.querySelectorAll(".messenger-toolbar-send")[0].click();
+    win.document.querySelectorAll(".messenger-toolbar-send")[0].click();
 }
 
 
 var main = async () => {
+
     // Assuming the DoubleTake page is open
     // Getting the current user ID
     let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
@@ -93,7 +89,12 @@ var main = async () => {
     let pathName = userProfileUrlObj.pathname.split("/");
     let userId = pathName[2];
 
-    var user = await getUserDetails(userId);
+    let win = window.open("https://www.okcupid.com/profile/" + userId + "?cf=quickmatch", "xxxx", "height=200,width=200");
+    await sleep(10000);
+
+    let user = await getUserDetails(userId, win);
+    win.close();
+
     console.log(user);
 }
 
