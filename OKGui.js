@@ -1,4 +1,8 @@
+var validLocations = ['Tel Aviv', 'Ramat Aviv', 'Ramat Gan', 'Giv`atayim', 'Bat Yam', 'H̱olon', 'Ramat HaSharon', 'Yehud', 'Yafo', 'Herzliyya', 'Kfar Saba', 'Nes Ziyyona', 'Qiryat Ono', 'Ra`ananna', 'Ramat H̱en', 'Hod HaSharon', 'Gelilot', 'Ramat H̱ayyal', 'Rishon LeẔiyyon', 'Hadar Yosef', 'Ramat H̱en', 'Giv`at Shemu’el', 'Ezra Uviẕẕaron', 'Qiryat Shalom', 'Kefar Gannim', 'Gan H̱ayyim', 'Reẖovot', 'Petaẖ Tiqwa', 'Herzliyya'];
+var validBody = ["average", "jacked", "overweight", "Full figured", "curvy", "A little extra"]
+var [MIN_AGE, MAX_AGE] = [24, 47];
 var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
+var okBaseURL = 'https://www.okcupid.com';
 
 var keyboardEvent = document.createEvent("KeyboardEvent");
 var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
@@ -78,6 +82,31 @@ var sendMsg = async (msg, win) => {
     win.document.querySelectorAll(".messenger-toolbar-send")[0].click();
 }
 
+var isValidUser = user => {
+
+    const validityFaults = [];
+    let [aboutMe, herBasics, herBackground, herLookingFor, isValidLocation, isValidAge, isValidBody, hasKids, isBroken] = Array(9).fill('');
+    try { aboutMe = user.essays[0] || ''; } catch (e) { }
+    try { herBasics = user.details[0] || ''; } catch (e) { }
+    try { herBackground = user.details[1] || ''; } catch (e) { }
+    try { herLookingFor = user.details[2] || ''; } catch (e) { }
+
+    validLocations = ['Tel Aviv', 'Ramat Aviv', 'Ramat Gan', 'Giv`atayim', 'Bat Yam', 'H̱olon', 'Ramat HaSharon', 'Yehud', 'Yafo', 'Herzliyya', 'Kfar Saba', 'Nes Ziyyona', 'Qiryat Ono', 'Ra`ananna', 'Ramat H̱en', 'Hod HaSharon', 'Gelilot', 'Ramat H̱ayyal', 'Rishon LeẔiyyon', 'Hadar Yosef', 'Ramat H̱en', 'Giv`at Shemu’el', 'Ezra Uviẕẕaron', 'Qiryat Shalom', 'Kefar Gannim', 'Gan H̱ayyim', 'Reẖovot', 'Petaẖ Tiqwa', 'Herzliyya'];
+
+    isValidLocation = validLocations.some(location => location === user.location);
+    isValidAge = user.age >= MAX_AGE && user.age < MIN_AGE;
+    isValidBody = !validBody.some(body => body === user.details[0]);
+    hasKids = herBackground.includes('Has kid(s)');
+    isBroken = aboutMe.includes(' ילד ') || aboutMe.includes(' ילדה ') || aboutMe.includes('+') || aboutMe.includes(' פלוס ') || aboutMe.includes(' אמא ');
+
+    let result = isValidLocation && isValidAge && isValidBody && !isBroken && !hasKids;
+    let msg = ['%c' + user.name, okBaseURL + '/profile/' + user.id];
+
+    result ?
+        console.log(msg[0] + " Valid: " + msg[1], 'background: #222; color: #14e722') :
+        console.log(msg[0] + " Broken: " + msg[1], 'background: #222; color: #a43c43');
+    return result;
+}
 
 var main = async () => {
 
@@ -87,12 +116,16 @@ var main = async () => {
     let userProfileUrlObj = new URL(userProfileUrlString);
 
     let pathName = userProfileUrlObj.pathname.split("/");
-    let userId = pathName[2];
+    user.userId = pathName[2];
 
     let win = window.open("https://www.okcupid.com/profile/" + userId + "?cf=quickmatch", "xxxx", "height=200,width=200");
     await sleep(10000);
 
-    let user = await getUserDetails(userId, win);
+    let user = await getUserDetails(user.userId, win);
+    let isUserValid = isValidUser(user);
+    // send message
+
+
     win.close();
 
     console.log(user);
