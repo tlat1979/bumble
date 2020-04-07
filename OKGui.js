@@ -1,3 +1,5 @@
+var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
+
 var keyboardEvent = document.createEvent("KeyboardEvent");
 var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
 
@@ -62,8 +64,8 @@ var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-lik
 var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
 
 // Like / Pass from User Profile
-var likeUserProfile = () => window.document.querySelectorAll("#like-button")[0].click();
-var passUserProfile = () => window.document.querySelectorAll("#pass-button")[0].click();
+var likeUserDoubleTake = () => window.document.querySelectorAll("#like-button")[0].click();
+var passUserDoubleTake = () => window.document.querySelectorAll("#pass-button")[0].click();
 
 var sendMsg = async msg => {
     var newStr = "";
@@ -85,15 +87,15 @@ var sendMsg = async msg => {
 var main = async () => {
     // Assuming the DoubleTake page is open
     // Getting the current user ID
-    let a = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
-    let b = a.split("/");
-    let c = b[b.length - 1];
-    let d = c.split("?")[0];
+    let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
+    let userProfileUrlObj = new URL(userProfileUrlString);
 
-    var user = await getUserDetails(d);
+    let pathName = userProfileUrlObj.pathname.split("/");
+    let userId = pathName[2];
+
+    var user = await getUserDetails(userId);
     console.log(user);
 }
-
 
 main();
 
