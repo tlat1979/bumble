@@ -79,8 +79,8 @@ var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-lik
 var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
 
 // Like / Pass from User Profile
-var likeUserFromProfile = () => window.document.querySelectorAll("#like-button")[0].click();
-var passUserFromProfile = () => window.document.querySelectorAll("#pass-button")[0].click();
+var likeUserFromProfile = win => win.document.querySelectorAll("#like-button")[0].click();
+var passUserFromProfile = win => win.document.querySelectorAll("#pass-button")[0].click();
 
 var sendMsg = async (msg, win) => {
     var newStr = "";
@@ -130,22 +130,24 @@ var main = async () => {
     // Getting the current user ID
     let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
     let userProfileUrlObj = new URL(userProfileUrlString);
-
     let pathName = userProfileUrlObj.pathname.split("/");
-
 
     let win = window.open(userProfileUrlString, "okCupid", "height=300, width=300");
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
 
-    let isUserValid = isValidUser(user);
+    // FIXME: Does not click on LIKE --> no MSG
 
-    //     isValidUser(user) ? 
-    //         likeUserDoubleTake() :
-    //         passUserDoubleTake() ;
-
-    // send message
+    if (isValidUser(user)) {
+        likeUserFromProfile(win);
+        likeUserDoubleTake();
+        await sleep(5000);
+        sendMsg("Hi :)", win);
+    }
+    else {
+        passUserDoubleTake();
+    }
 
     win.close();
 
