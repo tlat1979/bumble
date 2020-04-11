@@ -44,17 +44,31 @@ var getUserDetails = async (userId, win) => {
     }
 
     // User basic info    
-    user.details = [];
+    user.details = {};
     var userDetails = win.document.querySelectorAll(".matchprofile-details-section");
     for (details of userDetails) {
-        user.details.push(details.innerText);
+        let category = details.className.split('--')[1];
+        user.details[category] = details.innerText;
+
+        //let text = user.details.push(details.innerText);
+
     }
+
+    // $$(".matchprofile-details-section")[0].className.split('--')[1]
+
 
     // User extended info (essays)
     var profileEssays = win.document.querySelectorAll(".profile-essay");
-    user.essays = [];
+    user.essays = {};
     for (essay of profileEssays) {
-        user.essays.push(essay.innerText);
+        var txt = essay.innerText;
+        var txtArr = txt.split("\n");
+        var sectionTitle = txtArr[0];
+        txtArr.shift();
+        txtArr.pop();
+        user.essays[sectionTitle] = txtArr.join(" ");
+        var a = 5;
+        //user.essays.push(essay.innerText);
     }
 
     return user;
@@ -88,10 +102,10 @@ var isValidUser = user => {
 
     const validityFaults = [];
     let [aboutMe, herBasics, herBackground, herLookingFor, isValidLocation, isValidAge, isValidBody, hasKids, isBroken] = Array(9).fill('');
-    try { aboutMe = user.essays[0] || ''; } catch (e) { }
-    try { herBasics = user.details[0] || ''; } catch (e) { }
-    try { herBackground = user.details[1] || ''; } catch (e) { }
-    try { herLookingFor = user.details[2] || ''; } catch (e) { }
+    try { aboutMe = user.essays["ABOUT ME"] || ''; } catch (e) { }
+    try { herBasics = user.details["basics"] || ''; } catch (e) { }
+    try { herBackground = user.details["background"] || ''; } catch (e) { }
+    try { herLookingFor = user.details["wiw"] || ''; } catch (e) { }
 
     validLocations = ['Tel Aviv', 'Ramat Aviv', 'Ramat Gan', 'Giv`atayim', 'Bat Yam', 'H̱olon', 'Ramat HaSharon', 'Yehud', 'Yafo', 'Herzliyya', 'Kfar Saba', 'Nes Ziyyona', 'Qiryat Ono', 'Ra`ananna', 'Ramat H̱en', 'Hod HaSharon', 'Gelilot', 'Ramat H̱ayyal', 'Rishon LeẔiyyon', 'Hadar Yosef', 'Ramat H̱en', 'Giv`at Shemu’el', 'Ezra Uviẕẕaron', 'Qiryat Shalom', 'Kefar Gannim', 'Gan H̱ayyim', 'Reẖovot', 'Petaẖ Tiqwa', 'Herzliyya'];
 
@@ -124,10 +138,12 @@ var main = async () => {
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
-    //let isUserValid = isValidUser(user);
-    isValidUser(user) ?
-        likeUserDoubleTake() :
-        passUserDoubleTake();
+
+    let isUserValid = isValidUser(user);
+
+    //     isValidUser(user) ? 
+    //         likeUserDoubleTake() :
+    //         passUserDoubleTake() ;
 
     // send message
 
