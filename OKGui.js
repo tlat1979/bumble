@@ -3,6 +3,7 @@ var validBody = ["average", "jacked", "overweight", "Full figured", "curvy", "A 
 var [MIN_AGE, MAX_AGE] = [24, 47];
 var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
 var okBaseURL = 'https://www.okcupid.com';
+var okProfileURL = okBaseURL + "/profile";
 
 var keyboardEvent = document.createEvent("KeyboardEvent");
 var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
@@ -27,6 +28,7 @@ var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 // This function assumes that it rund of the doubleTake page 
 var getUserDetails = async (userId, win) => {
     var user = {};
+    user.userId = userId;
 
     // User: name, age, location
     user.name = window.document.querySelectorAll(".cardsummary-reflux-realname")[0].textContent;
@@ -94,13 +96,13 @@ var isValidUser = user => {
     validLocations = ['Tel Aviv', 'Ramat Aviv', 'Ramat Gan', 'Giv`atayim', 'Bat Yam', 'H̱olon', 'Ramat HaSharon', 'Yehud', 'Yafo', 'Herzliyya', 'Kfar Saba', 'Nes Ziyyona', 'Qiryat Ono', 'Ra`ananna', 'Ramat H̱en', 'Hod HaSharon', 'Gelilot', 'Ramat H̱ayyal', 'Rishon LeẔiyyon', 'Hadar Yosef', 'Ramat H̱en', 'Giv`at Shemu’el', 'Ezra Uviẕẕaron', 'Qiryat Shalom', 'Kefar Gannim', 'Gan H̱ayyim', 'Reẖovot', 'Petaẖ Tiqwa', 'Herzliyya'];
 
     isValidLocation = validLocations.some(location => location === user.location);
-    isValidAge = user.age >= MAX_AGE && user.age < MIN_AGE;
+    isValidAge = user.age >= MIN_AGE && user.age < MAX_AGE;
     isValidBody = !validBody.some(body => body === user.details[0]);
     hasKids = herBackground.includes('Has kid(s)');
     isBroken = aboutMe.includes(' ילד ') || aboutMe.includes(' ילדה ') || aboutMe.includes('+') || aboutMe.includes(' פלוס ') || aboutMe.includes(' אמא ');
 
     let result = isValidLocation && isValidAge && isValidBody && !isBroken && !hasKids;
-    let msg = ['%c' + user.name, okBaseURL + '/profile/' + user.id];
+    let msg = ['%c' + user.name, okBaseURL + '/profile/' + user.userId];
 
     result ?
         console.log(msg[0] + " Valid: " + msg[1], 'background: #222; color: #14e722') :
@@ -116,15 +118,18 @@ var main = async () => {
     let userProfileUrlObj = new URL(userProfileUrlString);
 
     let pathName = userProfileUrlObj.pathname.split("/");
-    user.userId = pathName[2];
 
-    let win = window.open("https://www.okcupid.com/profile/" + userId + "?cf=quickmatch", "xxxx", "height=200,width=200");
+
+    let win = window.open(userProfileUrlString, "okCupid", "height=300, width=300");
     await sleep(10000);
 
-    let user = await getUserDetails(user.userId, win);
-    let isUserValid = isValidUser(user);
-    // send message
+    let user = await getUserDetails(pathName[2], win);
+    //let isUserValid = isValidUser(user);
+    isValidUser(user) ?
+        likeUserDoubleTake() :
+        passUserDoubleTake();
 
+    // send message
 
     win.close();
 
