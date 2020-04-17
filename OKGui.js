@@ -22,6 +22,7 @@ keyboardEvent[initMethod](
 );
 
 
+
 // General sleep function
 var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -86,13 +87,15 @@ var sendMsg = async (msg, win) => {
     var newStr = "";
 
     // Inputing the msg letter by letter to simulate a real user
-    [...msg].forEach(async c => {
-        await sleep(100);
+    for (c of [...msg]) {
+        var randWait = getRandomInt(500, 1000);
+        await sleep(randWait);
         newStr += c;
         win.document.querySelectorAll(".messenger-composer")[0].value = newStr;
+        await sleep(100);
         win.document.querySelectorAll(".messenger-composer")[0].dispatchEvent(keyboardEvent);
         console.log(newStr);
-    });
+    }
 
     // Sending the message
     win.document.querySelectorAll(".messenger-toolbar-send")[0].click();
@@ -149,7 +152,11 @@ var main = async () => {
         passUserDoubleTake();
     }
 
-    win.close();
+    setTimeout(win => {
+        win.close
+    }, 20000);
+
+    //win.close();
 
     console.log(user);
 }
