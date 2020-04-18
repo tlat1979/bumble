@@ -21,8 +21,6 @@ keyboardEvent[initMethod](
     0          // charCode: unsigned long - the Unicode character associated with the depressed key, else 0
 );
 
-
-
 // General sleep function
 var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -31,7 +29,7 @@ var getUserDetails = async (userId, win) => {
     var user = {};
     user.userId = userId;
 
-    // User: name, age, location
+    // User: name, age, location, match percentage
     user.name = window.document.querySelectorAll(".cardsummary-reflux-realname")[0].textContent;
     user.age = window.document.querySelectorAll(".cardsummary-reflux-age")[0].textContent;
     user.location = window.document.querySelectorAll(".cardsummary-reflux-location")[0].textContent;
@@ -50,13 +48,7 @@ var getUserDetails = async (userId, win) => {
     for (details of userDetails) {
         let category = details.className.split('--')[1];
         user.details[category] = details.innerText;
-
-        //let text = user.details.push(details.innerText);
-
     }
-
-    // $$(".matchprofile-details-section")[0].className.split('--')[1]
-
 
     // User extended info (essays)
     var profileEssays = win.document.querySelectorAll(".profile-essay");
@@ -88,7 +80,7 @@ var sendMsg = async (msg, win) => {
 
     // Inputing the msg letter by letter to simulate a real user
     for (c of [...msg]) {
-        var randWait = getRandomInt(500, 1000);
+        var randWait = getRandomInt(50, 100);
         await sleep(randWait);
         newStr += c;
         win.document.querySelectorAll(".messenger-composer")[0].value = newStr;
@@ -127,36 +119,33 @@ var isValidUser = user => {
     return result;
 }
 
+// Assuming the DoubleTake page is open
 var main = async () => {
 
-    // Assuming the DoubleTake page is open
     // Getting the current user ID
     let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
     let userProfileUrlObj = new URL(userProfileUrlString);
     let pathName = userProfileUrlObj.pathname.split("/");
 
-    let win = window.open(userProfileUrlString, "okCupid", "height=300, width=300");
+    let win = window.open(userProfileUrlString, "okCupid", "height=600, width=600");
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
 
-    // FIXME: Does not click on LIKE --> no MSG
-
     if (isValidUser(user)) {
+
         likeUserFromProfile(win);
         likeUserDoubleTake();
-        await sleep(5000);
-        sendMsg("Hi :)", win);
+
+        await sleep(getRandomInt(1000, 2000));
+        sendMsg("Hi There " + user.name + "  :)", win);
     }
     else {
         passUserDoubleTake();
     }
 
-    setTimeout(win => {
-        win.close
-    }, 20000);
-
-    //win.close();
+    await sleep(10000);
+    win.close();
 
     console.log(user);
 }
