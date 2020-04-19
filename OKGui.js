@@ -63,6 +63,7 @@ var getUserDetails = async (userId, win) => {
         var a = 5;
         //user.essays.push(essay.innerText);
     }
+
     return user;
 }
 
@@ -103,6 +104,7 @@ var isValidUserBody = body => {
     return ret;
 }
 
+
 var isValidUser = user => {
 
     let validityFaults = [];
@@ -136,13 +138,17 @@ var main = async () => {
     let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
     let userProfileUrlObj = new URL(userProfileUrlString);
     let pathName = userProfileUrlObj.pathname.split("/");
+
     let win = window.open(userProfileUrlString, "okCupid", "height=600, width=600");
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
+
     if (isValidUser(user)) {
+
         likeUserFromProfile(win);
         likeUserDoubleTake();
+
         await sleep(getRandomInt(1000, 2000));
         sendMsg("Hi There " + user.name + " :)", win);
     }
@@ -152,8 +158,21 @@ var main = async () => {
 
     await sleep(10000);
     win.close();
+
     console.log(user);
 }
 
-main();
+var addressMultiUser = async () => {
+    var usersAmount = getRandomInt(2, 4);
+    for (let i = 0; i < usersAmount; i++) {
+        await main();
+        var randSleep = getRandomInt(1000, 1500);
+        await sleep(randSleep);
+    }
+}
+
+addressMultiUser()
+
+
+
 
