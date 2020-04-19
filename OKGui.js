@@ -68,8 +68,8 @@ var getUserDetails = async (userId, win) => {
 }
 
 // Like / Pass from doubletake
-var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-like-button")[0].click();
-var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
+var likeUserDoubleTake = _ => window.document.querySelectorAll(".doubletake-like-button")[0].click();
+var passUserDoubleTake = _ => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
 
 // Like / Pass from User Profile
 var likeUserFromProfile = win => win.document.querySelectorAll("#like-button")[0].click();
@@ -132,7 +132,7 @@ var isValidUser = user => {
 }
 
 // Assuming the DoubleTake page is open
-var main = async () => {
+var addressOneUser = async _ => {
 
     // Getting the current user ID
     let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
@@ -162,16 +162,16 @@ var main = async () => {
     console.log(user);
 }
 
-var addressMultiUser = async () => {
-    var usersAmount = getRandomInt(2, 4);
+var main = async _ => {
+    var usersAmount = getRandomInt(2, 5);
     for (let i = 0; i < usersAmount; i++) {
-        await main();
+        await addressOneUser();
         var randSleep = getRandomInt(1000, 1500);
         await sleep(randSleep);
     }
 }
 
-addressMultiUser()
+main();
 
 
 
