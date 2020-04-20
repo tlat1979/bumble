@@ -5,6 +5,8 @@ var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
 var okBaseURL = 'https://www.okcupid.com';
 var okProfileURL = okBaseURL + "/profile";
 
+var msgTxt = userName => `Hi ${userName}, how are you? I liked your profile :)`;
+
 var keyboardEvent = document.createEvent("KeyboardEvent");
 var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
 
@@ -68,8 +70,8 @@ var getUserDetails = async (userId, win) => {
 }
 
 // Like / Pass from doubletake
-var likeUserDoubleTake = _ => window.document.querySelectorAll(".doubletake-like-button")[0].click();
-var passUserDoubleTake = _ => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
+var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-like-button")[0].click();
+var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
 
 // Like / Pass from User Profile
 var likeUserFromProfile = win => win.document.querySelectorAll("#like-button")[0].click();
@@ -132,7 +134,7 @@ var isValidUser = user => {
 }
 
 // Assuming the DoubleTake page is open
-var addressOneUser = async _ => {
+var addressOneUser = async () => {
 
     // Getting the current user ID
     let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
@@ -149,21 +151,23 @@ var addressOneUser = async _ => {
         likeUserFromProfile(win);
         likeUserDoubleTake();
 
-        await sleep(getRandomInt(1000, 2000));
-        sendMsg("Hi There " + user.name + " :)", win);
+        await sleep(getRandomInt(1000, 2000)); user.name
+
+        sendMsg(msgTxt(user.name), win);
     }
     else {
         passUserDoubleTake();
     }
 
-    await sleep(10000);
+    await sleep(15000);
     win.close();
 
     console.log(user);
 }
 
+
 var main = async _ => {
-    var usersAmount = getRandomInt(2, 5);
+    var usersAmount = getRandomInt(2, 4);
     for (let i = 0; i < usersAmount; i++) {
         await addressOneUser();
         var randSleep = getRandomInt(1000, 1500);
@@ -171,7 +175,7 @@ var main = async _ => {
     }
 }
 
-main();
+main()
 
 
 
