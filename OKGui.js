@@ -82,12 +82,9 @@ var passUserFromProfile = win => win.document.querySelectorAll("#pass-button")[0
 var sendMsg = async (msg, win) => {
     var newStr = "";
 
-
-
     // Inputing the msg letter by letter to simulate a real user
     for (c of [...msg]) {
-        var randWait = getRandomInt(50, 100);
-        await sleep(randWait);
+        await sleep(getRandomInt(50, 100));
         newStr += c;
         win.document.querySelectorAll(".messenger-composer")[0].value = newStr;
         await sleep(100);
@@ -145,7 +142,7 @@ var addressOneUser = async () => {
     let userProfileUrlObj = new URL(userProfileUrlString);
     let pathName = userProfileUrlObj.pathname.split("/");
 
-    let win = window.open(userProfileUrlString, "okCupid", "height=600, width=600");
+    let win = window.open(userProfileUrlString, "okCupid", "height=800, width=800");
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
@@ -155,31 +152,35 @@ var addressOneUser = async () => {
         likeUserFromProfile(win);
         likeUserDoubleTake();
 
-        await sleep(getRandomInt(1000, 2000)); user.name
-
-        sendMsg(msgTxt(user.name), win);
+        await sleep(getRandomInt(4000, 5000));
+        await sendMsg(msgTxt(user.name), win);
+        //await sleep(15000);
     }
     else {
         passUserDoubleTake();
     }
-
-    await sleep(15000);
     win.close();
 
     console.log(user);
 }
 
+var discovery = _ => {
+    let userProfiles = window.document.querySelectorAll("a.user-photoAndText");
+    let profile = userProfiles[0];
+}
 
 var main = async _ => {
     var usersAmount = getRandomInt(2, 4);
+    console.log(`Addressing ${usersAmount} Users`);
     for (let i = 0; i < usersAmount; i++) {
         await addressOneUser();
-        var randSleep = getRandomInt(1000, 1500);
-        await sleep(randSleep);
+        await sleep(getRandomInt(1000, 1500));
     }
 }
 
-main()
+//main();
+
+discovery()
 
 
 
