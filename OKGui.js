@@ -135,14 +135,14 @@ var isValidUser = user => {
 }
 
 // Assuming the DoubleTake page is open
-var addressOneUser = async () => {
+var addressOneUser = async profileURL => {
 
-    // Getting the current user ID
-    let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
-    let userProfileUrlObj = new URL(userProfileUrlString);
+    // // Getting the current user ID
+    // let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
+    let userProfileUrlObj = new URL(profileURL);
     let pathName = userProfileUrlObj.pathname.split("/");
 
-    let win = window.open(userProfileUrlString, "okCupid", "height=800, width=800");
+    let win = window.open(profileURL, "okCupid", "height=800, width=800");
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
@@ -164,12 +164,24 @@ var addressOneUser = async () => {
     console.log(user);
 }
 
-var discovery = _ => {
+var discovery = async _ => {
     let userProfiles = window.document.querySelectorAll("a.user-photoAndText");
     let profile = userProfiles[0];
+    await addressOneUser(profile.href);
+}
+
+var doubleTake = async _ => {
+    // Getting the current user ID
+    let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
+    await addressOneUser(userProfileUrlString);
 }
 
 var main = async _ => {
+
+
+    //await discovery();
+    //wait doubleTake();
+
     var usersAmount = getRandomInt(2, 4);
     console.log(`Addressing ${usersAmount} Users`);
     for (let i = 0; i < usersAmount; i++) {
@@ -178,9 +190,7 @@ var main = async _ => {
     }
 }
 
-//main();
-
-discovery()
+main();
 
 
 
