@@ -32,16 +32,18 @@ var getUserDetails = async (userId, win) => {
     user.userId = userId;
 
     // User: name, age, location, match percentage
-    user.name = window.document.querySelectorAll(".cardsummary-reflux-realname")[0].textContent;
-    user.age = window.document.querySelectorAll(".cardsummary-reflux-age")[0].textContent;
-    user.location = window.document.querySelectorAll(".cardsummary-reflux-location")[0].textContent;
-    user.matchPercentage = window.document.querySelectorAll(".cardsummary-reflux-match-pct")[0].textContent;
+    user.name = win.document.querySelectorAll(".profile-basics-username")[0].textContent
+    user.age = win.document.querySelectorAll(".profile-basics-asl-age")[0].textContent
+    user.location = win.document.querySelectorAll(".profile-basics-asl-location")[0].textContent
+    user.matchPercentage = win.document.querySelectorAll(".profile-basics-asl-match")[0].textContent
 
     // User Photos
     user.photos = [];
-    var userPhotos = window.document.querySelectorAll(".qmcard-contents .image_wrapper > img");
+    var userPhotos = win.document.querySelectorAll(".profile-thumb img");
     for (photo of userPhotos) {
-        user.photos.push(photo.src);
+        // Big resolution images 
+        var href = photo.src.split("/225x225/225x225/").join("/");
+        user.photos.push(href);
     }
 
     // User basic info    
@@ -79,6 +81,8 @@ var passUserFromProfile = win => win.document.querySelectorAll("#pass-button")[0
 
 var sendMsg = async (msg, win) => {
     var newStr = "";
+
+
 
     // Inputing the msg letter by letter to simulate a real user
     for (c of [...msg]) {
