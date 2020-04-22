@@ -80,6 +80,15 @@ var likeUserFromProfile = win => win.document.querySelectorAll("#like-button")[0
 var passUserFromProfile = win => win.document.querySelectorAll("#pass-button")[0].click();
 
 var sendMsg = async (msg, win) => {
+
+    // Check if the user's mailbox is full
+    var isMailboxFull = false;
+    try { isMailboxFull = win.document.querySelectorAll(".messenger-banner")[0].textContent; } catch (e) { }
+    if (isMailboxFull) {
+        console.log("The user's mailbox is full - hot one?! :)");
+        return;
+    }
+
     var newStr = "";
 
     // Inputing the msg letter by letter to simulate a real user
@@ -180,17 +189,17 @@ var main = async _ => {
 
 
     //await discovery();
-    //wait doubleTake();
+    //await doubleTake();
 
     var usersAmount = getRandomInt(2, 4);
     console.log(`Addressing ${usersAmount} Users`);
     for (let i = 0; i < usersAmount; i++) {
-        await addressOneUser();
+        await doubleTake();
         await sleep(getRandomInt(1000, 1500));
     }
 }
 
-main();
+//main();
 
 
 
