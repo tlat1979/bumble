@@ -83,9 +83,16 @@ var sendMsg = async (msg, win) => {
 
     // Check if the user's mailbox is full
     var isMailboxFull = false;
+    var isMessageBoxAvaiable = false;
     try { isMailboxFull = win.document.querySelectorAll(".messenger-banner")[0].textContent; } catch (e) { }
     if (isMailboxFull) {
         console.log("The user's mailbox is full - hot one?! :)");
+        return;
+    }
+
+    try { isMessageBoxAvaiable = win.document.querySelectorAll(".messenger-composer")[0].value; } catch (e) { }
+    if (!isMessageBoxAvaiable) {
+        console.log("No message box available");
         return;
     }
 
