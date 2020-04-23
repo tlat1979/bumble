@@ -90,7 +90,7 @@ var sendMsg = async (msg, win) => {
         return;
     }
 
-    try { isMessageBoxAvaiable = win.document.querySelectorAll(".messenger-composer")[0].value; } catch (e) { }
+    try { isMessageBoxAvaiable = !win.document.querySelectorAll(".messenger-composer")[0].value; } catch (e) { }
     if (!isMessageBoxAvaiable) {
         console.log("No message box available");
         return;
