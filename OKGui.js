@@ -1,30 +1,26 @@
 var validLocations = ['Tel Aviv', 'Ramat Aviv', 'Ramat Gan', 'Giv`atayim', 'Bat Yam', 'H̱olon', 'Ramat HaSharon', 'Yehud', 'Yafo', 'Herzliyya', 'Kfar Saba', 'Nes Ziyyona', 'Qiryat Ono', 'Ra`ananna', 'Ramat H̱en', 'Hod HaSharon', 'Gelilot', 'Ramat H̱ayyal', 'Rishon LeẔiyyon', 'Hadar Yosef', 'Ramat H̱en', 'Giv`at Shemu’el', 'Ezra Uviẕẕaron', 'Qiryat Shalom', 'Kefar Gannim', 'Gan H̱ayyim', 'Reẖovot', 'Petaẖ Tiqwa', 'Herzliyya'];
-var invalidBodies = ["average", "jacked", "overweight", "Full figured", "curvy", "A little extra"]
+var invalidBodies = ["average", "jacked", "overweight", "Full figured", "curvy", "A little extra"];
+
 var [MIN_AGE, MAX_AGE] = [24, 47];
 var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
 var okBaseURL = 'https://www.okcupid.com';
 var okProfileURL = okBaseURL + "/profile";
 
-var msgTxt = userName => `Hi ${userName}, I liked your profile :)`;
-
 var keyboardEvent = document.createEvent("KeyboardEvent");
 var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
-
-keyboardEvent[initMethod](
-    "input", // event type: keydown, keyup, keypress
-    true,      // bubbles
-    true,      // cancelable
-    window,    // view: should be window
-    false,     // ctrlKey
-    false,     // altKey
-    false,     // shiftKey
-    false,     // metaKey
-    83,        // keyCode: unsigned long - the virtual key code, else 0
-    0          // charCode: unsigned long - the Unicode character associated with the depressed key, else 0
-);
+keyboardEvent[initMethod]("input", true, true, window, false, false, false, false, 83, 0);
 
 // General sleep function
 var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+var msgTxt = userName => {
+    var INTRO_MESSEGES = [
+        `Hi ${userName}, I liked your profile :)`,
+        `Hi There ${userName}, how are you? :)`,
+        `?מה שלומך ,${userName} היי`,
+    ];
+    return INTRO_MESSEGES[getRandomInt(0, 3)];
+}
 
 // This function assumes that it rund of the doubleTake page 
 var getUserDetails = async (userId, win) => {
@@ -106,9 +102,10 @@ var sendMsg = async (msg, win) => {
         await sleep(100);
         win.document.querySelectorAll(".messenger-composer")[0].dispatchEvent(keyboardEvent);
     }
-
+    await sleep(1000);
     // Sending the message
     win.document.querySelectorAll(".messenger-toolbar-send")[0].click();
+    await sleep(100);
 }
 
 var isValidUserBody = body => {
@@ -158,7 +155,7 @@ var addressOneUser = async profileURL => {
     let userProfileUrlObj = new URL(profileURL);
     let pathName = userProfileUrlObj.pathname.split("/");
 
-    let win = window.open(profileURL, "okCupid", "height=800, width=800");
+    let win = window.open(profileURL, "okCupid", "height=768, width=1024");
     await sleep(10000);
 
     let user = await getUserDetails(pathName[2], win);
