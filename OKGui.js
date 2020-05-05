@@ -1,6 +1,6 @@
 var validLocations = ['Tel Aviv', 'Ramat Aviv', 'Ramat Gan', 'Giv`atayim', 'Bat Yam', 'H̱olon', 'Ramat HaSharon', 'Yehud', 'Yafo', 'Herzliyya', 'Kfar Saba', 'Nes Ziyyona', 'Qiryat Ono', 'Ra`ananna', 'Ramat H̱en', 'Hod HaSharon', 'Gelilot', 'Ramat H̱ayyal', 'Rishon LeẔiyyon', 'Hadar Yosef', 'Ramat H̱en', 'Giv`at Shemu’el', 'Ezra Uviẕẕaron', 'Qiryat Shalom', 'Kefar Gannim', 'Gan H̱ayyim', 'Reẖovot', 'Petaẖ Tiqwa', 'Herzliyya'];
 var invalidBodies = ["average", "jacked", "overweight", "Full figured", "curvy", "A little extra"];
-
+var MINUTE = 60 * 1000;
 var [MIN_AGE, MAX_AGE] = [24, 47];
 var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
 var okBaseURL = 'https://www.okcupid.com';
@@ -25,13 +25,14 @@ var msgTxt = userName => {
 // This function assumes that it rund of the doubleTake page 
 var getUserDetails = async (userId, win) => {
     var user = {};
+    user.age = user.name = user.location = user.matchPercentage = "";
     user.userId = userId;
 
     // User: name, age, location, match percentage
-    user.name = win.document.querySelectorAll(".profile-basics-username")[0].textContent
-    user.age = win.document.querySelectorAll(".profile-basics-asl-age")[0].textContent
-    user.location = win.document.querySelectorAll(".profile-basics-asl-location")[0].textContent
-    user.matchPercentage = win.document.querySelectorAll(".profile-basics-asl-match")[0].textContent
+    try { user.name = win.document.querySelectorAll(".profile-basics-username")[0].textContent } catch (e) { }
+    try { user.age = win.document.querySelectorAll(".profile-basics-asl-age")[0].textContent } catch (e) { }
+    try { user.location = win.document.querySelectorAll(".profile-basics-asl-location")[0].textContent } catch (e) { }
+    try { user.matchPercentage = win.document.querySelectorAll(".profile-basics-asl-match")[0].textContent } catch (e) { }
 
     // User Photos
     user.photos = [];
@@ -156,7 +157,11 @@ var addressOneUser = async profileURL => {
     let pathName = userProfileUrlObj.pathname.split("/");
 
     let win = window.open(profileURL, "okCupid", "height=768, width=1024");
+    win.blur();
+    window.focus();
     await sleep(10000);
+
+
 
     let user = await getUserDetails(pathName[2], win);
 
@@ -174,7 +179,7 @@ var addressOneUser = async profileURL => {
     }
     win.close();
 
-    console.log(user);
+    console.dirxml(user);
 }
 
 var discovery = async _ => {
@@ -191,17 +196,20 @@ var doubleTake = async _ => {
 
 var main = async _ => {
 
-    //await doubleTake();
-
-    var usersAmount = getRandomInt(2, 4);
+    var usersAmount = getRandomInt(6, 14);
     console.log(`Addressing ${usersAmount} Users`);
     for (let i = 0; i < usersAmount; i++) {
         await doubleTake();
         await sleep(getRandomInt(1000, 1500));
     }
+    let wait = getRandomInt(60 * MINUTE, 90 * MINUTE);
+    console.log(`Sleeping ${wait / (60 * MINUTE)} between runs`);
+    await sleep(wait);
+
 }
 
 main();
+
 
 
 
