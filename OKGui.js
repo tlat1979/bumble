@@ -17,7 +17,8 @@ var msgTxt = userName => {
     var INTRO_MESSEGES = [
         `Hi ${userName}, I liked your profile :)`,
         `Hi There ${userName}, how are you? :)`,
-        `?מה שלומך ,${userName} היי`,
+        `:) ?מה שלומך ,${userName} היי`,
+        `:) אשמח להכיר ,${userName} היי`,
     ];
     return INTRO_MESSEGES[getRandomInt(0, 3)];
 }
@@ -71,6 +72,13 @@ var getUserDetails = async (userId, win) => {
 // Like / Pass from doubletake
 var likeUserDoubleTake = () => window.document.querySelectorAll(".doubletake-like-button")[0].click();
 var passUserDoubleTake = () => window.document.querySelectorAll(".doubletake-pass-button")[0].click();
+var likeUserPicture = async win => {
+    win.document.querySelector(".profile-thumb").click();
+    await sleep(3000);
+    win.document.querySelector(".photo-liker-button").click();
+    await sleep(1000);
+    //win.document.querySelector(".FullscreenOverlay-inner").click();
+}
 
 // Like / Pass from User Profile
 var likeUserFromProfile = win => win.document.querySelectorAll("#like-button")[0].click();
@@ -161,13 +169,13 @@ var addressOneUser = async profileURL => {
     window.focus();
     await sleep(10000);
 
-
-
     let user = await getUserDetails(pathName[2], win);
 
     if (isValidUser(user)) {
 
-        likeUserFromProfile(win);
+
+
+        await likeUserPicture(win);
         likeUserDoubleTake();
 
         await sleep(getRandomInt(4000, 5000));
