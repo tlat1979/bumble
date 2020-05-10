@@ -17,8 +17,7 @@ var msgTxt = userName => {
     var INTRO_MESSEGES = [
         `Hi ${userName}, I liked your profile :)`,
         `Hi There ${userName}, how are you? :)`,
-        `:) ?מה שלומך ,${userName} היי`,
-        `:) אשמח להכיר ,${userName} היי`,
+        `?מה שלומך ,${userName} היי`,
     ];
     return INTRO_MESSEGES[getRandomInt(0, 3)];
 }
@@ -173,9 +172,9 @@ var addressOneUser = async profileURL => {
 
     if (isValidUser(user)) {
 
-
-
-        await likeUserPicture(win);
+        // Balance between liking the profile (33%) picure and liking the person (67%)
+        var likeFromProfile = getRandomInt(0, 3);
+        likeFromProfile ? likeUserFromProfile(win) : await likeUserPicture(win);
         likeUserDoubleTake();
 
         await sleep(getRandomInt(4000, 5000));
