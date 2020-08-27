@@ -40,6 +40,17 @@ class User {
 
     getUserDetails = async () => {
         try {
+
+            // browse the user's pictures for simulating real user actions
+            var pix = document.querySelector('.tappable-view').children[3];
+            if (pix.children.length > 1) {
+                for(let i = 1; i < pix.children.length; i++) {
+                    let randWait = Math.floor(Math.random() * 1000);
+                    await this.sleep(randWait)  
+                    pix.children[i].click();
+                }
+            }
+
             // click *i* for more information
             document.querySelectorAll(".focus-button-style > svg")[0].parentElement.click();
             await this.sleep(1000);
@@ -109,8 +120,8 @@ class User {
 
 var addressRandUsers = async () => {
 
-    const MIN_USERS = 3
-    const MAX_USERS = 12
+    const MIN_USERS = 30
+    const MAX_USERS = 120
     const MIN_SLEEP = 5 * 1000 // 3 seconds 
     const MAX_SLEEP = 13 * 1000 // 7 seconds
 
@@ -130,7 +141,7 @@ var addressRandUsers = async () => {
             user.passUser();
 
         let randSleep = Math.floor(Math.random() * (MAX_SLEEP - MIN_SLEEP) + MIN_SLEEP);
-        log("User #" + (i + 1) + " Complete. Sleeping Between Users: " + Math.floor(randSleep / 1000) + " Seconds");
+        log("User #" + (i + 1) + " Complete. Sleeping Between Users: " + Math.floor(randSleep / 3000) + " Seconds");
         await user.sleep(randSleep);
     }
 }
@@ -149,3 +160,5 @@ var main = async () => {
         await user.sleep(rand);
     }
 }
+
+//$('.tappable-view').children[3].children[1].click()
