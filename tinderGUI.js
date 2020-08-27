@@ -122,8 +122,8 @@ var addressRandUsers = async () => {
 
     const MIN_USERS = 30
     const MAX_USERS = 120
-    const MIN_SLEEP = 5 * 1000 // 3 seconds 
-    const MAX_SLEEP = 13 * 1000 // 7 seconds
+    const MIN_SLEEP = 2 * 1000 // 2 seconds 
+    const MAX_SLEEP = 4 * 1000 // 4 seconds
 
     var d = new Date();
     var timeHours = d.getHours();
@@ -141,7 +141,7 @@ var addressRandUsers = async () => {
             user.passUser();
 
         let randSleep = Math.floor(Math.random() * (MAX_SLEEP - MIN_SLEEP) + MIN_SLEEP);
-        log("User #" + (i + 1) + " Complete. Sleeping Between Users: " + Math.floor(randSleep / 3000) + " Seconds");
+        log("User #" + (i + 1) + " Complete. Sleeping Between Users: " + Math.floor(randSleep / 1000) + " Seconds");
         await user.sleep(randSleep);
     }
 }
