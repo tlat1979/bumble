@@ -44,9 +44,9 @@ class User {
             // browse the user's pictures for simulating real user actions
             var pix = document.querySelector('.tappable-view').children[3];
             if (pix.children.length > 1) {
-                for(let i = 1; i < pix.children.length; i++) {
-                    let randWait = Math.floor(Math.random() * 1000);
-                    await this.sleep(randWait)  
+                for (let i = 1; i < pix.children.length; i++) {
+                    let randWait = Math.floor(Math.random() * 2000);
+                    await this.sleep(randWait)
                     pix.children[i].click();
                 }
             }
@@ -73,8 +73,7 @@ class User {
             this.about = getTextOrNone('.BreakWord');
 
             return true;
-        }
-        catch (e) {
+        } catch (e) {
             console.warn(e);
             return false;
         }
