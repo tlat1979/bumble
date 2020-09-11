@@ -97,11 +97,11 @@ class Bumble {
     }
 
     getUserDetails = () => {
-        let nameAge = this.utils.getProtect("encounters-story-profile__name");
-        nameAge = nameAge.split(',');
-        this.user.name = nameAge[0];
+        this.user.name = this.utils.getProtect("encounters-story-profile__name");
+        this.user.age =  this.utils.getProtect("encounters-story-profile__age");
+        this.user.age = this.user.age.split(",")[1].trim();
+        
         if (this.user.name == "") return false;
-        this.user.age = nameAge[1].trim();
         this.user.profession = this.utils.getProtect("encounters-story-profile__occupation");
         this.user.education = this.utils.getProtect("encounters-story-profile__education");
         this.user.about = this.utils.getProtect("encounters-story-about__text");
@@ -109,8 +109,8 @@ class Bumble {
         this.user.distance = this.utils.getProtect("location-widget__distance");
         if (this.user.distance) {
             let temp = this.user.distance.split(" ");
-            let temp1 = temp[0].split("~");
-            this.user.distance = (Array.isArray(temp1)) ? temp1[0] : temp1[1];
+            //let temp1 = temp[0].split("~");
+            this.user.distance =  temp[0]; //(Array.isArray(temp1)) ? temp1[0] : temp1[1];
         }
 
         // height, exercise, drink, smoke, pets, sign, religion
@@ -154,7 +154,7 @@ var mainBody = async bumble => {
     if (timeHours < 8 || timeHours > 23) return;
 
     // random user amount: 5 - 20
-    let randUserAmount = Math.floor(Math.random() * (20 - 5) + 5);
+    let randUserAmount = Math.floor(Math.random() * (20 - 10) + 10);
     log("Main addressing: " + randUserAmount + " of users", "blue");
     let arr = Array.from(Array(randUserAmount).keys())
 
@@ -168,7 +168,7 @@ var mainBody = async bumble => {
         await bumble.utils.scrollToButtom();
         bumble.isValidUser() ? bumble.utils.simulateClick(bumble.utils.like) : bumble.utils.simulateClick(bumble.utils.pass);
         // Sleeping between 2 - 5 seconds between user votes
-        let randSleep = bumble.utils.getPrintRand(5 * 1000, 20 * 1000, "Sleeping between users");
+        let randSleep = bumble.utils.getPrintRand(1 * 1000, 3 * 1000, "Sleeping between users");
         await bumble.utils.sleep(randSleep);
     }
     log("Done", "blue");

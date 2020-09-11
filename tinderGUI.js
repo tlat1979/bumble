@@ -159,5 +159,3 @@ var main = async () => {
         await user.sleep(rand);
     }
 }
-
-//$('.tappable-view').children[3].children[1].click()
