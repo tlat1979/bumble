@@ -109,8 +109,8 @@ class Bumble {
         this.user.distance = this.utils.getProtect("location-widget__distance");
         if (this.user.distance) {
             let temp = this.user.distance.split(" ");
-            //let temp1 = temp[0].split("~");
-            this.user.distance =  temp[0]; //(Array.isArray(temp1)) ? temp1[0] : temp1[1];
+            this.user.distance = temp[0].includes("~") ?  
+                temp[0].slice(1) : temp[0];  
         }
 
         // height, exercise, drink, smoke, pets, sign, religion
