@@ -15,9 +15,9 @@ var sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 var msgTxt = userName => {
     var INTRO_MESSEGES = [
-        `Hi ${userName}, I liked your profile :)`,
-        `Hi There ${userName}, how are you? :)`,
-        `?מה שלומך ,${userName} היי`,
+        `היי ${userName}, נשמע שאנחנו באותו ראש, שננסה? 🙂`,
+        `היי ${userName}, נשמע שאנחנו באותו ראש, שננסה? 🙂`,
+        `היי ${userName}, נשמע שאנחנו באותו ראש, שננסה? 🙂`
     ];
     return INTRO_MESSEGES[getRandomInt(0, 3)];
 }
@@ -197,7 +197,7 @@ var discovery = async _ => {
 
 var doubleTake = async _ => {
     // Getting the current user ID
-    let userProfileUrlString = window.document.querySelectorAll(".cardsummary-reflux-profile-link > a")[0].href;
+    let userProfileUrlString = window.document.querySelector(".cardsummary-profile-link > a").href;
     await addressOneUser(userProfileUrlString);
 }
 
