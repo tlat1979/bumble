@@ -173,8 +173,9 @@ var addressOneUser = async profileURL => {
     if (isValidUser(user)) {
 
         // Balance between liking the profile (33%) picure and liking the person (67%)
-        var likeFromProfile = getRandomInt(0, 3);
-        likeFromProfile ? likeUserFromProfile(win) : await likeUserPicture(win);
+        //var likeFromProfile = getRandomInt(0, 3);
+        //likeFromProfile ? likeUserFromProfile(win) : await likeUserPicture(win);
+        likeUserFromProfile(win);
         likeUserDoubleTake();
 
         await sleep(getRandomInt(4000, 5000));
