@@ -94,8 +94,10 @@ class User {
         if (this.about) {
             for (let i in this.BROKEN_CONDITIONS) {
                 if ((this.about).includes(this.BROKEN_CONDITIONS[i])) {
-                    validAbout = false;
-                    break;
+                    if (!(this.about).includes("ללא ילדים")) {
+                        validAbout = false;
+                        break;    
+                    }
                 }
             }
         }
