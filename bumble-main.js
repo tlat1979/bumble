@@ -23,7 +23,7 @@ class Utils {
     constructor() {
         this.MAX_AGE = 47;
         this.MIN_AGE = 24
-        this.MAX_DISTANCE = 21;
+        this.MAX_DISTANCE = 15;
         this.BROKEN_CONDITIONS = ["+", "ילד", "אמא", "mom", "נסיך", "נסיכה", "פלוס"];
         this.MILLISECOND_TO_HOUR = 60 * 60 * 1000;
         this.HOUR_TO_MILLISECOND = 1 / (60 * 60 * 1000);
@@ -134,8 +134,10 @@ class Bumble {
         if (this.user.about) {
             for (let i in this.utils.BROKEN_CONDITIONS) {
                 if ((this.user.about).includes(this.utils.BROKEN_CONDITIONS[i])) {
-                    validAbout = false;
-                    break;
+                    if (!(this.user.about).includes("ללא ילדים")) {
+                        validAbout = false;
+                        break;    
+                    }
                 }
             }
         }
@@ -187,7 +189,7 @@ var main = async () => {
     }
 }
 
-
+main();
 // var repeatQuery = () => {
 //     let bumble = new Bumble();
 //     var HOUR = bumble.utils.MILLISECOND_TO_HOUR;

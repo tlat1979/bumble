@@ -119,8 +119,8 @@ class User {
 
 var addressRandUsers = async () => {
 
-    const MIN_USERS = 30
-    const MAX_USERS = 120
+    const MIN_USERS = 12
+    const MAX_USERS = 24
     const MIN_SLEEP = 2 * 1000 // 2 seconds 
     const MAX_SLEEP = 4 * 1000 // 4 seconds
 
@@ -159,3 +159,7 @@ var main = async () => {
         await user.sleep(rand);
     }
 }
+
+main();
+
+//$('.tappable-view').children[3].children[1].click()
