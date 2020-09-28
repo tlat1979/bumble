@@ -138,6 +138,9 @@ class Bumble {
                         validAbout = false;
                         break;    
                     }
+                    else {
+                        var a = 5;
+                    }
                 }
             }
         }
@@ -156,7 +159,7 @@ var mainBody = async bumble => {
     if (timeHours < 8 || timeHours > 23) return;
 
     // random user amount: 5 - 20
-    let randUserAmount = Math.floor(Math.random() * (20 - 10) + 10);
+    let randUserAmount = Math.floor(Math.random() * (30 - 20) + 20);
     log("Main addressing: " + randUserAmount + " of users", "blue");
     let arr = Array.from(Array(randUserAmount).keys())
 

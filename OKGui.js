@@ -144,8 +144,10 @@ var isValidUser = user => {
     isValidAge = user.age >= MIN_AGE && user.age < MAX_AGE;
     isValidBody = isValidUserBody(herLooks);
     hasKids = herFamily.includes('Has kid(s)');
-    isBroken = aboutMe.includes(' ילד ') || aboutMe.includes(' ילדה ') || aboutMe.includes('+') || aboutMe.includes(' פלוס ') || aboutMe.includes(' אמא ');
 
+    isBroken = aboutMe.includes(' ילד ') || aboutMe.includes(' ילדה ') || aboutMe.includes('+') || aboutMe.includes(' פלוס ') || aboutMe.includes(' אמא ');
+    if (aboutMe.includes("ללא ילדים")) isBroken = '';
+              
     let result = isValidLocation && isValidAge && isValidBody && !isBroken && !hasKids;
     let msg = user.name + " | " + user.age + " | " + user.location + " | " + okBaseURL + '/profile/' + user.userId;
 
@@ -163,7 +165,8 @@ var addressOneUser = async profileURL => {
     let userProfileUrlObj = new URL(profileURL);
     let pathName = userProfileUrlObj.pathname.split("/");
 
-    let win = window.open(profileURL, "okCupid", "height=768, width=1024");
+    //let win = window.open(profileURL, "okCupid", "height=768, width=1024");
+    let win = window.open(profileURL, '_blank', 'location=yes, height=100,width=200,top=-100,left=-100');
     win.blur();
     window.focus();
     await sleep(10000);
@@ -175,12 +178,18 @@ var addressOneUser = async profileURL => {
         // Balance between liking the profile (33%) picure and liking the person (67%)
         //var likeFromProfile = getRandomInt(0, 3);
         //likeFromProfile ? likeUserFromProfile(win) : await likeUserPicture(win);
-        likeUserFromProfile(win);
-        likeUserDoubleTake();
+        try {
+            await sleep(5000);
+            likeUserFromProfile(win);
+            
+        }
+        catch(e) { }
 
         await sleep(getRandomInt(4000, 5000));
         await sendMsg(msgTxt(user.name), win);
         //await sleep(15000);
+        await sleep(2000);
+        likeUserDoubleTake();
     }
     else {
         passUserDoubleTake();
