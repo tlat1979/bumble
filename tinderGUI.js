@@ -99,7 +99,7 @@ var addressRandUsers = async () => {
 
    var d = new Date();
    var timeHours = d.getHours();
-   if (timeHours < 8 || timeHours > 23) return;
+   if (timeHours < 17 || timeHours > 23) return;
 
    let randUsers = getRandomInt(MIN_USERS, MAX_USERS);
    log("Addressing: " + randUsers + " Users");
@@ -126,15 +126,18 @@ var addressRandUsers = async () => {
 }
 
 var main = async () => {
-   const HOUR = 60 * 60 * 1000 // 1 hour in milli
-   let i = 0;
-   while (true) {
-       i++;
-       await addressRandUsers();
-       var rand = getRandomInt(20000, 40000);
-       await sleep(rand);
-       log(`Run # ${i} Complete. Sleeping between runs: ${Math.floor(rand / HOUR)} Hours`);
-   }
+    const HOUR = 60 * 60 * 1000 // 1 hour in milli
+    const MIN_SLEEP = 1 * HOUR // 1 hour 
+    const MAX_SLEEP = 3 * HOUR // 3 hours
+    let i = 0;
+    var user = new User();
+    while (true) {
+        i++;
+        await addressRandUsers();
+        let rand = Math.floor(Math.random() * (MAX_SLEEP - MIN_SLEEP) + MIN_SLEEP);
+        log("Run #" + i + " Complete. Sleeping between runs: " + Math.floor(rand / HOUR) + " Hours");
+        await user.sleep(rand);
+    }
 }
 
 main();
