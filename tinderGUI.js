@@ -136,7 +136,7 @@ var main = async () => {
         await addressRandUsers();
         let rand = Math.floor(Math.random() * (MAX_SLEEP - MIN_SLEEP) + MIN_SLEEP);
         log("Run #" + i + " Complete. Sleeping between runs: " + Math.floor(rand / HOUR) + " Hours");
-        await user.sleep(rand);
+        await sleep(rand);
     }
 }
 
